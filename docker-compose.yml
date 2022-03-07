@@ -1,0 +1,14 @@
+version: "3.5"
+
+services:
+  postgres:
+    container_name: app-sorveteria
+    image: postgres:12.5
+    environment:
+      POSTGRES_USER: ${BD_USERNAME}
+      POSTGRES_DB: ${BD_DATABASE}
+      POSTGRES_PASSWORD: ${BD_PASSWORD}
+    expose:
+      - "${BD_PORT}"
+    ports:
+      - "${BD_PORT}:${BD_PORT}"
