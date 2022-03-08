@@ -152,7 +152,7 @@ describe('Users', () => {
 
   it('Should return 400 when update user by invalid type id', async () => {
     const response = await request(app)
-      .delete(`/users/aaa`)
+      .put(`/users/aaa`)
       .set('Authorization', `bearer ${token}`)
       .send(editedUser);
 

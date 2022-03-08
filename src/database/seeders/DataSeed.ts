@@ -1,5 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 import { EnumRoleUser } from '../../entities/User';
+import { ClientRepository } from '../../repositories/ClientRepository';
 import { UserRepository } from '../../repositories/UserRepository';
 
 class DataSeed {
@@ -51,6 +52,31 @@ class DataSeed {
     );
 
     await repository.save(arrayUsers);
+  }
+
+  public static async createClients(): Promise<void> {
+    const repository = getCustomRepository(ClientRepository);
+    const arrayClients = [];
+
+    arrayClients.push(
+      repository.create({
+        name: 'Maria Aparecida Teste',
+        phone: '35984987634',
+        debit: 85.5,
+      }),
+      repository.create({
+        name: 'Carlos Gomes Teste',
+        phone: '35984987635',
+        debit: 0,
+      }),
+      repository.create({
+        name: 'Pedro Alcantara Teste',
+        phone: '35984987636',
+        debit: 10,
+      }),
+    );
+
+    await repository.save(arrayClients);
   }
 }
 

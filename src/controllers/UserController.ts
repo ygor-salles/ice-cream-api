@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { IUser } from '../interfaces/IUser';
+import { IUser } from '../dtos/IUser';
 import { UserService } from '../services/UserService';
 import { ApiError } from '../validators/Exceptions/ApiError';
 import { UserValidator } from '../validators/UserValidator';
