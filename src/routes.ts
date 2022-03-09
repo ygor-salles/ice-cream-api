@@ -5,6 +5,7 @@ import { UserController } from './controllers/UserController';
 import { AuthController } from './controllers/AuthController';
 import { ClientController } from './controllers/ClientController';
 import { ProviderController } from './controllers/ProviderController';
+import { ProductController } from './controllers/ProductController';
 
 const router = Router();
 
@@ -16,6 +17,7 @@ const authController = new AuthController();
 const userController = new UserController();
 const clientController = new ClientController();
 const providerController = new ProviderController();
+const productController = new ProductController();
 
 router.post('/signin', authController.handle);
 
@@ -35,5 +37,11 @@ router.post('/providers', ensureAuthenticated, ensureSuper, providerController.c
 router.get('/providers', ensureAuthenticated, providerController.read);
 router.get('/providers/:id', ensureAuthenticated, providerController.readById);
 router.put('/providers/:id', ensureAuthenticated, ensureSuper, providerController.updateById);
+
+router.post('/products', ensureAuthenticated, ensureSuper, productController.create);
+router.get('/products', ensureAuthenticated, productController.read);
+router.get('/products/:id', ensureAuthenticated, productController.readById);
+router.delete('/products/:id', ensureAuthenticated, productController.deleteById);
+router.put('/products/:id', ensureAuthenticated, ensureSuper, productController.updateById);
 
 export { router };
