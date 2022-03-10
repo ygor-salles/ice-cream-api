@@ -18,7 +18,7 @@ class ClientValidator {
   createValidaton() {
     return yup.object().shape({
       name: yup.string().required('Name is required'),
-      phone: yup.string().required('Phone is required'),
+      phone: yup.string().optional(),
       debit: yup.number().required('Debit is required'),
     });
   }

@@ -68,19 +68,6 @@ describe('Clients', () => {
     expect(response.body.message).toBe('Name is required');
   });
 
-  it('Should returns 400 beacause there is no client phone', async () => {
-    const response = await request(app)
-      .post('/clients')
-      .set('Authorization', `bearer ${token}`)
-      .send({
-        name: 'Client example 2',
-        debit: 12,
-      });
-
-    expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Phone is required');
-  });
-
   it('Should returns 400 beacause there is no client debit', async () => {
     const response = await request(app)
       .post('/clients')
@@ -198,5 +185,52 @@ describe('Clients', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.length).toEqual(allClients.length);
+  });
+
+  // testes para deleção de cliente
+  it('Should be able to delete a client and return 200', async () => {
+    const response = await request(app)
+      .delete(`/clients/${clientId}`)
+      .set('Authorization', `bearer ${token}`);
+
+    const repository = getCustomRepository(ClientRepository);
+    const deleted = await repository.findOne({ id: clientId });
+
+    expect(response.status).toBe(200);
+    expect(deleted).toBeUndefined();
+    expect(response.body.message).toBe('Client deleted successfully');
+  });
+
+  it('Should return 400 when delete client by invalid type id', async () => {
+    const response = await request(app)
+      .delete(`/clients/aaa`)
+      .set('Authorization', `bearer ${token}`);
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe(
+      'id must be a `number` type, but the final value was: `NaN` (cast from the value `NaN`).',
+    );
+  });
+
+  it('Should return 404 for delete missing id client', async () => {
+    const response = await request(app)
+      .delete(`/clients/${idInexist}`)
+      .set('Authorization', `bearer ${token}`);
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe('Client does not exist');
+  });
+
+  // teste para deleção de cliente que possuem registros de outras tabelas associadas - validação da constraint FKClient ON DELETE RESTRICT
+  // erro tratado diretamente no banco de dados com a opção ON DELETE RESTRICT - Utilizado dados dos seeders para o teste
+  it('should not allow deleting the customer because there are payments associated with it', async () => {
+    const response = await request(app)
+      .delete('/clients/1')
+      .set('Authorization', `bearer ${token}`);
+
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe(
+      'update or delete on table "clients" violates foreign key constraint "FKClient" on table "payments"',
+    );
   });
 });

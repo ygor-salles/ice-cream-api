@@ -10,7 +10,7 @@ class AuthController {
     try {
       await authValidator.authValidation().validate(request.body, { abortEarly: false });
     } catch (error) {
-      return response.status(200).json({ message: error.message });
+      return response.status(400).json({ message: error.message });
     }
 
     const authenticateUserService = new AuthService();
@@ -20,7 +20,7 @@ class AuthController {
     });
 
     if (token.status === 400) {
-      return response.status(200).json({ message: token.message });
+      return response.status(400).json({ message: token.message });
     }
     return response.json(token);
   }
