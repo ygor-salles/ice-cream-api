@@ -33,7 +33,6 @@ export class CreatePayment1646782250548 implements MigrationInterface {
           {
             name: 'client_id',
             type: 'int',
-            isNullable: true,
           },
         ],
         foreignKeys: [

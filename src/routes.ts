@@ -10,10 +10,6 @@ import { PaymentController } from './controllers/PaymentController';
 
 const router = Router();
 
-router.get('/', (req: Request, res: Response) => {
-  res.status(200).json({ message: 'Hellow world' });
-});
-
 const authController = new AuthController();
 const userController = new UserController();
 const clientController = new ClientController();
@@ -21,6 +17,9 @@ const providerController = new ProviderController();
 const productController = new ProductController();
 const paymentController = new PaymentController();
 
+router.get('/', (req: Request, resp: Response) =>
+  resp.status(200).json({ message: 'Welcome api-iceCreamShop' }),
+);
 router.post('/signin', authController.handle);
 
 // router.post('/users', ensureAuthenticated, ensureSuper, userController.create);

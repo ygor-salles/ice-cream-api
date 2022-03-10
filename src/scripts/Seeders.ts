@@ -20,6 +20,9 @@ class SeederRun {
 
         await DataSeed.createUsers();
         await DataSeed.createClients();
+        await DataSeed.createProducts();
+        await DataSeed.createProviders();
+        await DataSeed.createPayments();
         console.log('\n== [Seeders run successfully] ==');
 
         await connection.close();

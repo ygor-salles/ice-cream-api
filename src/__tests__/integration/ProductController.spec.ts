@@ -7,7 +7,7 @@ import { ProductRepository } from '../../repositories/ProductRepository';
 // id inexistente
 const idInexist = 9999;
 
-// usuário criado na execução dos seeders
+// produto criado na execução dos seeders
 const loginUser = {
   email: 'user1@gmail.com',
   password: '123456',
@@ -40,7 +40,7 @@ describe('Products', () => {
     await connection.close();
   });
 
-  // testes para criação de usuário
+  // testes para criação de produto
   it('Should be able to create a new product and return 201', async () => {
     const response = await request(app)
       .post('/products')
@@ -78,7 +78,7 @@ describe('Products', () => {
     expect(response.body.message).toBe('Product already exists');
   });
 
-  // testes para atualização de usuário
+  // testes para atualização de produto
   it('Should be able to edit a existing product and return 200', async () => {
     const response = await request(app)
       .put(`/products/${productId}`)
@@ -117,7 +117,7 @@ describe('Products', () => {
     expect(response.body.message).toBe('Product does not exist');
   });
 
-  // testes para visualização de usuário por id
+  // testes para visualização de produto por id
   it('Should be able to get a product by Id and return 200', async () => {
     const response = await request(app)
       .get(`/products/${productId}`)
