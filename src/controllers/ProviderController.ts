@@ -62,6 +62,22 @@ class ProviderController {
     await providerService.updateById(+id, data);
     return response.status(200).json({ message: 'Provider updated successfully' });
   }
+
+  async deleteById(request: Request, response: Response) {
+    const { id } = request.params;
+
+    const providerValidator = new ProviderValidator();
+    try {
+      await providerValidator.deleteByIdValidation().validate({ id: +id }, { abortEarly: false });
+    } catch (error) {
+      throw new ApiError(error.message ? 400 : 404, error.message || error);
+    }
+    if (!(await providerValidator.idExist(+id))) throw new ApiError(404, 'Provider does not exist');
+
+    const providerService = new ProviderService();
+    await providerService.deleteById(+id);
+    return response.status(200).json({ message: 'Provider deleted successfully' });
+  }
 }
 
 export { ProviderController };

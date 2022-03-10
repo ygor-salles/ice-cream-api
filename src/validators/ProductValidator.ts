@@ -18,8 +18,8 @@ class ProductValidator {
   createValidaton() {
     return yup.object().shape({
       name: yup.string().required('Name is required'),
-      price: yup.number().required('Price is required'),
-      description: yup.string().required('Description is required'),
+      price: yup.number().optional(),
+      description: yup.string().optional(),
     });
   }
 

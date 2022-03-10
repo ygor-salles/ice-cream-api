@@ -26,6 +26,10 @@ class ProviderService {
     return provider;
   }
 
+  async deleteById(id: number) {
+    await this.repositoryProvider.delete(id);
+  }
+
   async updateById(id: number, data: IProvider) {
     await this.repositoryProvider.update(id, data);
   }

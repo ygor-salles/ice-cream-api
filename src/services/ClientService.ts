@@ -26,6 +26,10 @@ class ClientService {
     return client;
   }
 
+  async deleteById(id: number) {
+    await this.repositoryClient.delete(id);
+  }
+
   async updateById(id: number, data: IClient) {
     await this.repositoryClient.update(id, data);
   }

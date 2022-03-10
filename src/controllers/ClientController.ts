@@ -44,6 +44,22 @@ class ClientController {
     return response.status(200).json(client);
   }
 
+  async deleteById(request: Request, response: Response) {
+    const { id } = request.params;
+
+    const clientValidator = new ClientValidator();
+    try {
+      await clientValidator.deleteByIdValidation().validate({ id: +id }, { abortEarly: false });
+    } catch (error) {
+      throw new ApiError(error.message ? 400 : 404, error.message || error);
+    }
+    if (!(await clientValidator.idExist(+id))) throw new ApiError(404, 'Client does not exist');
+
+    const clientService = new ClientService();
+    await clientService.deleteById(+id);
+    return response.status(200).json({ message: 'Client deleted successfully' });
+  }
+
   async updateById(request: Request, response: Response) {
     const { id } = request.params;
     const { ...data }: IClient = request.body;
