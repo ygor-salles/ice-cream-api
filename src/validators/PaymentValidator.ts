@@ -13,7 +13,7 @@ class PaymentValidator {
     return yup.object().shape({
       value: yup.number().required('Value is required'),
       observation: yup.string().optional(),
-      client_id: yup.number().optional(),
+      client_id: yup.number().required('Client_id is required'),
     });
   }
 

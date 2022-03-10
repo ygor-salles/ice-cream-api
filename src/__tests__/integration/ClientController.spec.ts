@@ -220,4 +220,17 @@ describe('Clients', () => {
     expect(response.status).toBe(404);
     expect(response.body.message).toBe('Client does not exist');
   });
+
+  // teste para deleção de cliente que possuem registros de outras tabelas associadas - validação da constraint FKClient ON DELETE RESTRICT
+  // erro tratado diretamente no banco de dados com a opção ON DELETE RESTRICT - Utilizado dados dos seeders para o teste
+  it('should not allow deleting the customer because there are payments associated with it', async () => {
+    const response = await request(app)
+      .delete('/clients/1')
+      .set('Authorization', `bearer ${token}`);
+
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe(
+      'update or delete on table "clients" violates foreign key constraint "FKClient" on table "payments"',
+    );
+  });
 });
