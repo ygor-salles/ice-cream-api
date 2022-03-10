@@ -68,32 +68,6 @@ describe('Products', () => {
     expect(response.body.message).toBe('Name is required');
   });
 
-  it('Should returns 400 because there is no product price', async () => {
-    const response = await request(app)
-      .post('/products')
-      .set('Authorization', `bearer ${token}`)
-      .send({
-        name: 'Product 2',
-        description: 'bla bla bla',
-      });
-
-    expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Price is required');
-  });
-
-  it('Should returns 400 because there is no valid product description', async () => {
-    const response = await request(app)
-      .post('/products')
-      .set('Authorization', `bearer ${token}`)
-      .send({
-        name: 'Product 3',
-        price: 10.5,
-      });
-
-    expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Description is required');
-  });
-
   it('Should not be able to create a product with exists product and return 400', async () => {
     const response = await request(app)
       .post('/products')
