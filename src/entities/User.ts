@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
-import { hashSync } from 'bcryptjs';
 import {
   BeforeInsert,
   Column,
@@ -9,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { HookUser } from '../hooks/HookUser';
 
 export enum EnumRoleUser {
   SUPER = 'SUPER',
@@ -40,8 +40,8 @@ class User {
   updated_at: Date;
 
   @BeforeInsert()
-  hashPassword() {
-    this.password = hashSync(this.password, 8);
+  async beforeInsert(): Promise<void> {
+    this.password = await HookUser.hashPassword(this.password);
   }
 }
 

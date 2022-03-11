@@ -2,6 +2,7 @@ import request from 'supertest';
 import { getConnection, getCustomRepository } from 'typeorm';
 import { app } from '../../app';
 import createConnection from '../../database';
+import { ClientRepository } from '../../repositories/ClientRepository';
 import { PaymentRepository } from '../../repositories/PaymentRepository';
 
 // id inexistente
@@ -23,6 +24,18 @@ const editedPayment = {
   value: 10,
   observation: 'Pago 10 reais no pix',
   client_id: 2,
+};
+
+const client2 = {
+  name: 'Augusto Pereira Magalhães',
+  phone: '35987094362',
+  debit: 130,
+};
+
+const payment2 = {
+  value: 150,
+  observation: '150 reais no pix',
+  client_id: null,
 };
 
 let token: string;
@@ -79,6 +92,29 @@ describe('Payments', () => {
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe('Client_id is required');
+  });
+
+  it('Should not debit the customers account when trying to make a payment greater than your debt', async () => {
+    const repositoryClient = getCustomRepository(ClientRepository);
+
+    const debitFinish = client2.debit - payment2.value;
+
+    const client = repositoryClient.create(client2);
+    await repositoryClient.save(client);
+    payment2.client_id = client.id;
+
+    const response = await request(app)
+      .post('/payments')
+      .set('Authorization', `bearer ${token}`)
+      .send(payment2);
+
+    const updateClient = await repositoryClient.findOne(client.id);
+
+    expect(response.body.message).toBe(
+      'Attention! Payment greater than debit. Operation not completed!',
+    );
+    expect(updateClient.debit).not.toBe(debitFinish);
+    expect(updateClient.debit).toBe(client2.debit);
   });
 
   // testes para atualização de pagamento

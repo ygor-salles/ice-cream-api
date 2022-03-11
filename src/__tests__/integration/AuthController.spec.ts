@@ -38,7 +38,6 @@ describe('Auth', () => {
       password: 'test',
     };
     const response = await request(app).post('/signin').send(loginNotExistingUser);
-    console.log('Resposta Body', response.body.message);
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe('Credenciais incorretas!');
