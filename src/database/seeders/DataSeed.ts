@@ -65,16 +65,16 @@ class DataSeed {
       repository.create({
         name: 'Maria Aparecida Teste',
         phone: '35984987634',
-        debit: 85.5,
+        debit: 300,
       }),
       repository.create({
         name: 'Carlos Gomes Teste',
-        debit: 0,
+        debit: 300,
       }),
       repository.create({
         name: 'Pedro Alcantara Teste',
         phone: '35984987636',
-        debit: 10,
+        debit: 0,
       }),
     );
 
