@@ -8,6 +8,7 @@ import { ProviderController } from './controllers/ProviderController';
 import { ProductController } from './controllers/ProductController';
 import { PaymentController } from './controllers/PaymentController';
 import { SaleController } from './controllers/SaleController';
+import { CombinationController } from './controllers/CombinationController';
 
 const router = Router();
 
@@ -18,6 +19,7 @@ const providerController = new ProviderController();
 const productController = new ProductController();
 const paymentController = new PaymentController();
 const saleController = new SaleController();
+const combinationController = new CombinationController();
 
 router.get('/', (req: Request, resp: Response) =>
   resp.status(200).json({ message: 'Welcome api-iceCreamShop' }),
@@ -60,5 +62,16 @@ router.get('/sales', ensureAuthenticated, saleController.read);
 router.get('/sales/:id', ensureAuthenticated, saleController.readById);
 router.delete('/sales/:id', ensureAuthenticated, ensureSuper, saleController.deleteById);
 router.put('/sales/:id', ensureAuthenticated, ensureSuper, saleController.updateById);
+
+router.post('/combinations', ensureAuthenticated, ensureSuper, combinationController.create);
+router.get('/combinations', ensureAuthenticated, combinationController.read);
+router.get('/combinations/:id', ensureAuthenticated, combinationController.readById);
+router.delete(
+  '/combinations/:id',
+  ensureAuthenticated,
+  ensureSuper,
+  combinationController.deleteById,
+);
+router.put('/combinations/:id', ensureAuthenticated, ensureSuper, combinationController.updateById);
 
 export { router };
