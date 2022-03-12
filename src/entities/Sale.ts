@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-shadow */
 import {
-  AfterInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -8,16 +9,26 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { HookPayment } from '../hooks/HookPayment';
 import { Client } from './Client';
+import { Product } from './Product';
 
-@Entity('payments')
-class Payment {
+export enum EnumTypeSale {
+  PIX = 'PIX',
+  CARD = 'CARD',
+  MONEY = 'MONEY',
+  DEBIT = 'DEBIT',
+}
+
+@Entity('sales')
+class Sale {
   @PrimaryGeneratedColumn()
   readonly id: number;
 
   @Column()
-  value: number;
+  total: number;
+
+  @Column()
+  type_sale: EnumTypeSale;
 
   @Column()
   observation: string;
@@ -35,10 +46,12 @@ class Payment {
   @JoinColumn({ name: 'client_id' })
   client: Client;
 
-  @AfterInsert()
-  async afterInsert(): Promise<void> {
-    await HookPayment.updateDebitClient(this.value, this.client_id);
-  }
+  @Column()
+  product_id?: number;
+
+  @ManyToOne(() => Product)
+  @JoinColumn({ name: 'product_id' })
+  product: Product;
 }
 
-export { Payment };
+export { Sale };
