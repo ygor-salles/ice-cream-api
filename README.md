@@ -39,7 +39,6 @@ API em ExpressJS. Aplicação backend simplificada para registro e consulta de i
 - [prettier](https://prettier.io/)
 - [Jest](https://jestjs.io/pt-BR/)
 - [Supertest](https://www.npmjs.com/package/supertest)
-- [Handlebars](https://handlebarsjs.com/)
 - [JsonWebtoken](https://www.npmjs.com/package/jsonwebtoken)
 - [bcryptjs](https://www.npmjs.com/package/bcryptjs)
 
@@ -241,6 +240,5 @@ yarn build
 
 O projeto ainda está em desenvolvimento e as próximas atualizações serão voltadas nas seguintes tarefas:
 
-- [ ] Entidade SALES
 - [ ] Entidade PURCHASES
 - [ ] Entidade COMBINATIONS
