@@ -29,6 +29,20 @@ export class CreateCombinations1647116887564 implements MigrationInterface {
             type: 'timestamp',
             default: 'now()',
           },
+          {
+            name: 'product_id',
+            type: 'int',
+          },
+        ],
+        foreignKeys: [
+          {
+            name: 'FKProduct',
+            referencedTableName: 'products',
+            referencedColumnNames: ['id'],
+            columnNames: ['product_id'],
+            onDelete: 'RESTRICT',
+            onUpdate: 'CASCADE',
+          },
         ],
       }),
     );
