@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class createProduct1646787301309 implements MigrationInterface {
+export class createPurchase1647304357843 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'products',
+        name: 'purchases',
         columns: [
           {
             name: 'id',
@@ -12,17 +12,20 @@ export class createProduct1646787301309 implements MigrationInterface {
             isPrimary: true,
           },
           {
-            name: 'name',
-            type: 'varchar',
-            isUnique: true,
+            name: 'value_total',
+            type: 'real',
           },
           {
-            name: 'price',
-            type: 'real',
+            name: 'observation',
+            type: 'text',
             isNullable: true,
           },
           {
-            name: 'description',
+            name: 'its_ice_cream_shoop',
+            type: 'boolean',
+          },
+          {
+            name: 'nf_url',
             type: 'text',
             isNullable: true,
           },
@@ -36,12 +39,26 @@ export class createProduct1646787301309 implements MigrationInterface {
             type: 'timestamp',
             default: 'now()',
           },
+          {
+            name: 'provider_id',
+            type: 'int',
+          },
+        ],
+        foreignKeys: [
+          {
+            name: 'FKProvider',
+            referencedTableName: 'providers',
+            referencedColumnNames: ['id'],
+            columnNames: ['provider_id'],
+            onDelete: 'RESTRICT',
+            onUpdate: 'CASCADE',
+          },
         ],
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('products');
+    await queryRunner.dropTable('purchases');
   }
 }

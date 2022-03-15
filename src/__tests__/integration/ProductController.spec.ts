@@ -7,11 +7,7 @@ import { ProductRepository } from '../../repositories/ProductRepository';
 // id inexistente
 const idInexist = 9999;
 
-<<<<<<< HEAD
-// usuário criado na execução dos seeders
-=======
 // produto criado na execução dos seeders
->>>>>>> main
 const loginUser = {
   email: 'user1@gmail.com',
   password: '123456',
@@ -44,11 +40,7 @@ describe('Products', () => {
     await connection.close();
   });
 
-<<<<<<< HEAD
-  // testes para criação de usuário
-=======
   // testes para criação de produto
->>>>>>> main
   it('Should be able to create a new product and return 201', async () => {
     const response = await request(app)
       .post('/products')
@@ -76,35 +68,6 @@ describe('Products', () => {
     expect(response.body.message).toBe('Name is required');
   });
 
-<<<<<<< HEAD
-  it('Should returns 400 because there is no product price', async () => {
-    const response = await request(app)
-      .post('/products')
-      .set('Authorization', `bearer ${token}`)
-      .send({
-        name: 'Product 2',
-        description: 'bla bla bla',
-      });
-
-    expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Price is required');
-  });
-
-  it('Should returns 400 because there is no valid product description', async () => {
-    const response = await request(app)
-      .post('/products')
-      .set('Authorization', `bearer ${token}`)
-      .send({
-        name: 'Product 3',
-        price: 10.5,
-      });
-
-    expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Description is required');
-  });
-
-=======
->>>>>>> main
   it('Should not be able to create a product with exists product and return 400', async () => {
     const response = await request(app)
       .post('/products')
@@ -115,11 +78,7 @@ describe('Products', () => {
     expect(response.body.message).toBe('Product already exists');
   });
 
-<<<<<<< HEAD
-  // testes para atualização de usuário
-=======
   // testes para atualização de produto
->>>>>>> main
   it('Should be able to edit a existing product and return 200', async () => {
     const response = await request(app)
       .put(`/products/${productId}`)
@@ -158,11 +117,7 @@ describe('Products', () => {
     expect(response.body.message).toBe('Product does not exist');
   });
 
-<<<<<<< HEAD
-  // testes para visualização de usuário por id
-=======
   // testes para visualização de produto por id
->>>>>>> main
   it('Should be able to get a product by Id and return 200', async () => {
     const response = await request(app)
       .get(`/products/${productId}`)
