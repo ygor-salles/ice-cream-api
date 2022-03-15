@@ -1,9 +1,11 @@
 import { getCustomRepository } from 'typeorm';
+import { EnumTypeSale } from '../../entities/Sale';
 import { EnumRoleUser } from '../../entities/User';
 import { ClientRepository } from '../../repositories/ClientRepository';
 import { PaymentRepository } from '../../repositories/PaymentRepository';
 import { ProductRepository } from '../../repositories/ProductRepository';
 import { ProviderRepository } from '../../repositories/ProviderRepository';
+import { SaleRepository } from '../../repositories/SaleRepository';
 import { UserRepository } from '../../repositories/UserRepository';
 
 class DataSeed {
@@ -65,16 +67,16 @@ class DataSeed {
       repository.create({
         name: 'Maria Aparecida Teste',
         phone: '35984987634',
-        debit: 85.5,
+        debit: 300,
       }),
       repository.create({
         name: 'Carlos Gomes Teste',
-        debit: 0,
+        debit: 300,
       }),
       repository.create({
         name: 'Pedro Alcantara Teste',
         phone: '35984987636',
-        debit: 10,
+        debit: 0,
       }),
     );
 
@@ -150,6 +152,34 @@ class DataSeed {
     );
 
     await repository.save(arrayProviders);
+  }
+
+  public static async createSales(): Promise<void> {
+    const repository = getCustomRepository(SaleRepository);
+    const arraySales = [];
+
+    arraySales.push(
+      repository.create({
+        total: 6,
+        type_sale: EnumTypeSale.MONEY,
+        observation: 'Pago 3 reais no pix e 3 reais no dinheiro',
+        product_id: 1,
+        client_id: 2,
+      }),
+      repository.create({
+        total: 10,
+        type_sale: EnumTypeSale.PIX,
+        product_id: 3,
+      }),
+      repository.create({
+        total: 3.5,
+        type_sale: EnumTypeSale.MONEY,
+        product_id: 2,
+        client_id: 2,
+      }),
+    );
+
+    await repository.save(arraySales);
   }
 }
 
