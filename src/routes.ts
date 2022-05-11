@@ -29,8 +29,8 @@ router.get('/', (req: Request, resp: Response) =>
 router.post('/signin', authController.handle);
 
 // *************************************** USER ROUTES ********************************************** //
-// router.post('/users', ensureAuthenticated, ensureSuper, userController.create);
-router.post('/users', userController.create);
+router.post('/users', ensureAuthenticated, ensureSuper, userController.create);
+// router.post('/users', userController.create);
 router.get('/users', ensureAuthenticated, userController.read);
 router.get('/users/:id', userController.readById);
 router.delete('/users/:id', ensureAuthenticated, ensureSuper, userController.deleteById);
