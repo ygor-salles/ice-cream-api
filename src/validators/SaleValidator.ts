@@ -14,7 +14,7 @@ class SaleValidator {
     return yup.object().shape({
       total: yup.number().required('Total is required'),
       type_sale: yup
-        .mixed<keyof typeof EnumTypeSale>()
+        .mixed<EnumTypeSale>()
         .oneOf(Object.values(EnumTypeSale))
         .required('Type_sale is required'),
       observation: yup.string().optional(),
@@ -27,10 +27,7 @@ class SaleValidator {
     return yup.object().shape({
       id: yup.number().required('Id is required in params'),
       total: yup.number().optional(),
-      type_sale: yup
-        .mixed<keyof typeof EnumTypeSale>()
-        .oneOf(Object.values(EnumTypeSale))
-        .optional(),
+      type_sale: yup.mixed<EnumTypeSale>().oneOf(Object.values(EnumTypeSale)).optional(),
       observation: yup.string().optional(),
       product_id: yup.number().optional(),
       client_id: yup.number().optional(),
