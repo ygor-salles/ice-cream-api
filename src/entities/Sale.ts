@@ -14,9 +14,9 @@ import { Product } from './Product';
 
 export enum EnumTypeSale {
   PIX = 'PIX',
-  CARD = 'CARD',
-  MONEY = 'MONEY',
-  DEBIT = 'DEBIT',
+  CARD = 'CARTAO',
+  MONEY = 'DINHEIRO',
+  DEBIT = 'FIADO',
 }
 
 @Entity('sales')
