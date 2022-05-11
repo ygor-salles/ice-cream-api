@@ -52,6 +52,27 @@ if (process.env.NODE_ENV === 'development') {
       migrationsDir: 'build/src/database/migrations',
     },
   };
+} else if (process.env.NODE_ENV === 'staging') {
+  config = {
+    type: 'postgres',
+    host: process.env.BD_HOST_STG,
+    port: +process.env.BD_PORT_STG || 5432,
+    username: process.env.BD_USERNAME_STG,
+    password: process.env.BD_PASSWORD_STG,
+    database: process.env.BD_DATABASE_STG,
+    synchronize: false,
+    extra: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+    migrations: ['build/src/database/migrations/*.js'],
+    entities: ['build/src/entities/*.js'],
+    cli: {
+      migrationsDir: 'build/src/database/migrations',
+    },
+  };
 } else {
   console.log('NODE_ENV incorrect...');
 }
