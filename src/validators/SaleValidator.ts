@@ -18,6 +18,7 @@ class SaleValidator {
         .oneOf(Object.values(EnumTypeSale))
         .required('Type_sale is required'),
       observation: yup.string().optional(),
+      amount: yup.number().required('Amount is required'),
       product_id: yup.number().required('Product_id is required'),
       client_id: yup.number().optional(),
     });
@@ -29,6 +30,7 @@ class SaleValidator {
       total: yup.number().optional(),
       type_sale: yup.mixed<EnumTypeSale>().oneOf(Object.values(EnumTypeSale)).optional(),
       observation: yup.string().optional(),
+      amount: yup.number().optional(),
       product_id: yup.number().optional(),
       client_id: yup.number().optional(),
     });

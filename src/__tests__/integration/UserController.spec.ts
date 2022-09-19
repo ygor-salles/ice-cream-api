@@ -45,7 +45,10 @@ describe('Users', () => {
 
   // testes para criação de usuário
   it('Should be able to create a new user and return 201', async () => {
-    const response = await request(app).post('/users').send(createUser);
+    const response = await request(app)
+      .post('/users')
+      .set('Authorization', `bearer ${token}`)
+      .send(createUser);
 
     userId = response.body.id;
 
@@ -56,68 +59,86 @@ describe('Users', () => {
   });
 
   it('Should returns 400 beacause there is no user name', async () => {
-    const response = await request(app).post('/users').send({
-      email: 'user@example2.com.br',
-      password: '123456',
-      role: EnumRoleUser.SUPER,
-    });
+    const response = await request(app)
+      .post('/users')
+      .set('Authorization', `bearer ${token}`)
+      .send({
+        email: 'user@example2.com.br',
+        password: '123456',
+        role: EnumRoleUser.SUPER,
+      });
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe('Name is required');
   });
 
   it('Should returns 400 beacause there is no user email', async () => {
-    const response = await request(app).post('/users').send({
-      name: 'User example 2',
-      password: '123456',
-      role: EnumRoleUser.SUPER,
-    });
+    const response = await request(app)
+      .post('/users')
+      .set('Authorization', `bearer ${token}`)
+      .send({
+        name: 'User example 2',
+        password: '123456',
+        role: EnumRoleUser.SUPER,
+      });
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe('E-mail is required');
   });
 
   it('Should returns 400 beacause there is no valid user email', async () => {
-    const response = await request(app).post('/users').send({
-      name: 'User example 2',
-      email: 'email_invalid.com',
-      password: '123456',
-      role: EnumRoleUser.SUPER,
-    });
+    const response = await request(app)
+      .post('/users')
+      .set('Authorization', `bearer ${token}`)
+      .send({
+        name: 'User example 2',
+        email: 'email_invalid.com',
+        password: '123456',
+        role: EnumRoleUser.SUPER,
+      });
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe('Should be e-mail');
   });
 
   it('Should returns 400 beacause there is no user password', async () => {
-    const response = await request(app).post('/users').send({
-      name: 'User example 2',
-      email: 'user@example2.com.br',
-      role: EnumRoleUser.SUPER,
-    });
+    const response = await request(app)
+      .post('/users')
+      .set('Authorization', `bearer ${token}`)
+      .send({
+        name: 'User example 2',
+        email: 'user@example2.com.br',
+        role: EnumRoleUser.SUPER,
+      });
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe('Password is required');
   });
 
   it('Should returns 400 beacause there is no user role', async () => {
-    const response = await request(app).post('/users').send({
-      name: 'User example 2',
-      email: 'user@example2.com.br',
-      password: '123456',
-    });
+    const response = await request(app)
+      .post('/users')
+      .set('Authorization', `bearer ${token}`)
+      .send({
+        name: 'User example 2',
+        email: 'user@example2.com.br',
+        password: '123456',
+      });
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe('Type user is required');
   });
 
   it('Should returns 400 beacause there is no valid user role', async () => {
-    const response = await request(app).post('/users').send({
-      name: 'User example 2',
-      email: 'user@example2.com.br',
-      password: '123456',
-      role: 'invalid',
-    });
+    const response = await request(app)
+      .post('/users')
+      .set('Authorization', `bearer ${token}`)
+      .send({
+        name: 'User example 2',
+        email: 'user@example2.com.br',
+        password: '123456',
+        role: 'invalid',
+      });
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe(
@@ -126,7 +147,10 @@ describe('Users', () => {
   });
 
   it('Should not be able to create a user with exists email and return 400', async () => {
-    const response = await request(app).post('/users').send(createUser);
+    const response = await request(app)
+      .post('/users')
+      .set('Authorization', `bearer ${token}`)
+      .send(createUser);
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe('User already exists');

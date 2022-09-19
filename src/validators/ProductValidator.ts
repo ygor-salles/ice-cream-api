@@ -1,5 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 import * as yup from 'yup';
+import { EnumTypeProduct } from '../entities/Product';
 import { ProductRepository } from '../repositories/ProductRepository';
 
 class ProductValidator {
@@ -20,6 +21,11 @@ class ProductValidator {
       name: yup.string().required('Name is required'),
       price: yup.number().optional(),
       description: yup.string().optional(),
+      type: yup
+        .mixed<EnumTypeProduct>()
+        .oneOf(Object.values(EnumTypeProduct))
+        .required('Type_product is required'),
+      status: yup.boolean().optional(),
     });
   }
 
@@ -29,6 +35,8 @@ class ProductValidator {
       name: yup.string().optional(),
       price: yup.number().optional(),
       description: yup.string().optional(),
+      type: yup.mixed<EnumTypeProduct>().oneOf(Object.values(EnumTypeProduct)).optional(),
+      status: yup.boolean().optional(),
     });
   }
 

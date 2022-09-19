@@ -4,34 +4,34 @@ import { Product } from '../entities/Product';
 import { ProductRepository } from '../repositories/ProductRepository';
 
 class ProductService {
-  private repositoryProvider: Repository<Product>;
+  private repositoryProduct: Repository<Product>;
 
   constructor() {
-    this.repositoryProvider = getCustomRepository(ProductRepository);
+    this.repositoryProduct = getCustomRepository(ProductRepository);
   }
 
   async create(data: IProduct) {
-    const provider = this.repositoryProvider.create(data);
-    await this.repositoryProvider.save(provider);
-    return provider;
+    const product = this.repositoryProduct.create(data);
+    await this.repositoryProduct.save(product);
+    return product;
   }
 
   async read() {
-    const allProviders = await this.repositoryProvider.find();
-    return allProviders;
+    const allProducts = await this.repositoryProduct.find();
+    return allProducts;
   }
 
   async readById(id: number) {
-    const provider = await this.repositoryProvider.findOne(id);
-    return provider;
+    const product = await this.repositoryProduct.findOne(id);
+    return product;
   }
 
   async deleteById(id: number) {
-    await this.repositoryProvider.delete(id);
+    await this.repositoryProduct.delete(id);
   }
 
   async updateById(id: number, data: IProduct) {
-    await this.repositoryProvider.update(id, data);
+    await this.repositoryProduct.update(id, data);
   }
 }
 

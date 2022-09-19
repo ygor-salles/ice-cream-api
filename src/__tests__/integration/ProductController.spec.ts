@@ -2,6 +2,7 @@ import request from 'supertest';
 import { getConnection, getCustomRepository } from 'typeorm';
 import { app } from '../../app';
 import createConnection from '../../database';
+import { EnumTypeProduct } from '../../entities/Product';
 import { ProductRepository } from '../../repositories/ProductRepository';
 
 // id inexistente
@@ -16,6 +17,7 @@ const loginUser = {
 const createProduct = {
   name: 'Bolo de morang',
   price: 10.5,
+  type: EnumTypeProduct.GENERAL,
   description: 'O melhor bolo de morango',
 };
 
@@ -23,6 +25,7 @@ const editedProduct = {
   name: 'Bolo de morango',
   price: 10.3,
   description: 'O melhor bolo de morango do mundo',
+  type: EnumTypeProduct.ACAI,
 };
 
 let token: string;
@@ -53,6 +56,7 @@ describe('Products', () => {
     expect(response.body.name).toBe(createProduct.name);
     expect(response.body.price).toBe(createProduct.price);
     expect(response.body.description).toBe(createProduct.description);
+    expect(response.body.type).toBe(createProduct.type);
   });
 
   it('Should returns 400 because there is no product name', async () => {
@@ -62,10 +66,25 @@ describe('Products', () => {
       .send({
         price: 12.0,
         description: 'bla bla bla',
+        type: EnumTypeProduct.GENERAL,
       });
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe('Name is required');
+  });
+
+  it('Should returns 400 because there is no product type', async () => {
+    const response = await request(app)
+      .post('/products')
+      .set('Authorization', `bearer ${token}`)
+      .send({
+        name: 'salgadinho',
+        price: 1.5,
+        description: 'bla bla bla',
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('Type_product is required');
   });
 
   it('Should not be able to create a product with exists product and return 400', async () => {
@@ -92,6 +111,7 @@ describe('Products', () => {
     expect(productUpdated.name).toBe(editedProduct.name);
     expect(productUpdated.price).toBe(editedProduct.price);
     expect(productUpdated.description).toBe(editedProduct.description);
+    expect(productUpdated.type).toBe(editedProduct.type);
     expect(response.body.message).toBe('Product updated successfully');
   });
 

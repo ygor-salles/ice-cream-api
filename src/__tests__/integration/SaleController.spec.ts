@@ -18,6 +18,7 @@ const createSale = {
   total: 15,
   type_sale: EnumTypeSale.MONEY,
   observation: 'Pago 10 reais no pix e 5 reais no dinheiro',
+  amount: 1,
   product_id: 2,
   client_id: 2,
 };
@@ -26,6 +27,7 @@ const editedSale = {
   total: 0.5,
   type_sale: EnumTypeSale.PIX,
   observation: 'Valor alterado - R$ 0,50',
+  amount: 2,
   product_id: 3,
   client_id: 3,
 };
@@ -58,6 +60,7 @@ describe('Sales', () => {
     expect(response.body.total).toBe(createSale.total);
     expect(response.body.type_sale).toBe(createSale.type_sale);
     expect(response.body.observation).toBe(createSale.observation);
+    expect(response.body.amount).toBe(createSale.amount);
     expect(response.body.product_id).toBe(createSale.product_id);
     expect(response.body.client_id).toBe(createSale.client_id);
   });
@@ -69,12 +72,29 @@ describe('Sales', () => {
       .send({
         type_sale: EnumTypeSale.MONEY,
         observation: 'Pago 10 reais no pix e 5 reais no dinheiro',
+        amount: 1,
         product_id: 2,
         client_id: 2,
       });
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe('Total is required');
+  });
+
+  it('Should returns 400 because there is no sales amount', async () => {
+    const response = await request(app)
+      .post('/sales')
+      .set('Authorization', `bearer ${token}`)
+      .send({
+        type_sale: EnumTypeSale.MONEY,
+        total: 15,
+        observation: 'Pago 10 reais no pix e 5 reais no dinheiro',
+        product_id: 2,
+        client_id: 2,
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('Amount is required');
   });
 
   it('Should returns 400 because there is no sale type_sale', async () => {
@@ -84,6 +104,7 @@ describe('Sales', () => {
       .send({
         total: 15,
         observation: 'Pago 10 reais no pix e 5 reais no dinheiro',
+        amount: 1,
         product_id: 2,
         client_id: 2,
       });
@@ -99,6 +120,7 @@ describe('Sales', () => {
       .send({
         total: 2,
         type_sale: EnumTypeSale.MONEY,
+        amount: 1,
         observation: '1 real de bala e 1 real de chiclete',
         client_id: 2,
       });
@@ -121,6 +143,7 @@ describe('Sales', () => {
     expect(saleUpdated.total).toBe(editedSale.total);
     expect(saleUpdated.type_sale).toBe(editedSale.type_sale);
     expect(saleUpdated.observation).toBe(editedSale.observation);
+    expect(saleUpdated.amount).toBe(editedSale.amount);
     expect(saleUpdated.product_id).toBe(editedSale.product_id);
     expect(saleUpdated.client_id).toBe(editedSale.client_id);
     expect(response.body.message).toBe('Sale updated successfully');
@@ -158,6 +181,7 @@ describe('Sales', () => {
     expect(response.body.total).toBe(editedSale.total);
     expect(response.body.type_sale).toBe(editedSale.type_sale);
     expect(response.body.observation).toBe(editedSale.observation);
+    expect(response.body.amount).toBe(editedSale.amount);
     expect(response.body.product_id).toBe(editedSale.product_id);
     expect(response.body.client_id).toBe(editedSale.client_id);
   });

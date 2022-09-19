@@ -33,6 +33,9 @@ class Sale {
   @Column()
   observation: string;
 
+  @Column()
+  amount: number;
+
   @CreateDateColumn()
   created_at: Date;
 
