@@ -14,7 +14,10 @@ class UserController {
     } catch (error) {
       throw new ApiError(400, error.message || error);
     }
-    if (await userValidator.emailExist(data.email)) throw new ApiError(400, 'User already exists');
+
+    if (await userValidator.emailExist(data.email)) {
+      throw new ApiError(400, 'User already exists');
+    }
 
     const userService = new UserService();
     const user = await userService.create(data);

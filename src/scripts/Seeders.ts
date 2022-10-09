@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { DataSeed } from '../database/seeders/DataSeed';
 import createConnection from '../database/index';
 import 'dotenv/config';

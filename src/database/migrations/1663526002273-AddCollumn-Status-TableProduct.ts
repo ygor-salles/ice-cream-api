@@ -7,7 +7,7 @@ export class AddCollumnStatusTableProduct1663526002273 implements MigrationInter
       new TableColumn({
         name: 'status',
         type: 'boolean',
-        default: false,
+        default: true,
       }),
     );
   }

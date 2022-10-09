@@ -51,10 +51,8 @@ router.delete('/providers/:id', ensureAuthenticated, ensureSuper, providerContro
 router.put('/providers/:id', ensureAuthenticated, ensureSuper, providerController.updateById);
 
 // *************************************** PRODUCT ROUTES ********************************************** //
-// router.post('/products', ensureAuthenticated, ensureSuper, productController.create);
-router.post('/products', productController.create);
-// router.get('/products', ensureAuthenticated, productController.read);
-router.get('/products', productController.read);
+router.post('/products', ensureAuthenticated, ensureSuper, productController.create);
+router.get('/products', ensureAuthenticated, productController.read);
 router.get('/products/:id', ensureAuthenticated, productController.readById);
 router.delete('/products/:id', ensureAuthenticated, ensureSuper, productController.deleteById);
 router.put('/products/:id', ensureAuthenticated, ensureSuper, productController.updateById);

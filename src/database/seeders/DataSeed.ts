@@ -1,4 +1,5 @@
 import { getCustomRepository } from 'typeorm';
+import { EnumTypeProduct } from '../../entities/Product';
 import { EnumTypeSale } from '../../entities/Sale';
 import { EnumRoleUser } from '../../entities/User';
 import { ClientRepository } from '../../repositories/ClientRepository';
@@ -115,15 +116,20 @@ class DataSeed {
       repository.create({
         name: 'Chocolate Trento',
         price: 3.5,
+        type: EnumTypeProduct.GENERAL,
       }),
       repository.create({
         name: 'Sorvete de chocolate',
         description: 'Sorvete de chocolate samatina',
+        type: EnumTypeProduct.ICE_CREAM,
+        status: true,
       }),
       repository.create({
         name: 'Pirulito',
         price: 0.5,
         description: 'Pirulito lolipop',
+        type: EnumTypeProduct.GENERAL,
+        status: false,
       }),
     );
 
@@ -165,17 +171,20 @@ class DataSeed {
         observation: 'Pago 3 reais no pix e 3 reais no dinheiro',
         product_id: 1,
         client_id: 2,
+        amount: 1,
       }),
       repository.create({
         total: 10,
         type_sale: EnumTypeSale.PIX,
         product_id: 3,
+        amount: 1,
       }),
       repository.create({
         total: 3.5,
         type_sale: EnumTypeSale.MONEY,
         product_id: 2,
         client_id: 2,
+        amount: 2,
       }),
     );
 
