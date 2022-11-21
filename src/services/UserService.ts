@@ -20,7 +20,7 @@ class UserService {
 
   async read() {
     const allUsers = await this.repositoryUser.find({
-      select: ['id', 'name', 'email', 'created_at', 'updated_at'],
+      select: ['id', 'name', 'email', 'role', 'created_at', 'updated_at'],
     });
     return allUsers;
   }
