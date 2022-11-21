@@ -17,12 +17,12 @@ class PaymentService {
   }
 
   async read() {
-    const allPayments = await this.repositoryPayment.find();
+    const allPayments = await this.repositoryPayment.find({ relations: ['client'] });
     return allPayments;
   }
 
   async readById(id: number) {
-    const payment = await this.repositoryPayment.findOne(id);
+    const payment = await this.repositoryPayment.findOne({ relations: ['client'], where: { id } });
     return payment;
   }
 
