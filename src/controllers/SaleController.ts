@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 import { Request, Response } from 'express';
 import { ISale } from '../dtos/ISale';
 import { SaleService } from '../services/SaleService';
@@ -73,6 +74,23 @@ class SaleController {
     const saleService = new SaleService();
     await saleService.updateById(+id, data);
     return response.status(200).json({ message: 'Sale updated successfully' });
+  }
+
+  async readSalesPaged(request: Request, response: Response) {
+    let { limit, page }: any = request.query;
+    limit = parseInt(limit || 1);
+    page = parseInt(page || 1);
+
+    const validator = new SaleValidator();
+    try {
+      await validator.readPagedValidation().validate({ limit, page }, { abortEarly: false });
+    } catch (error) {
+      throw new ApiError(400, error.message || error);
+    }
+
+    const saleService = new SaleService();
+    const allSalesPaged = await saleService.readSalesPaged(limit, page);
+    return response.status(200).json(allSalesPaged);
   }
 }
 

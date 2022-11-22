@@ -74,6 +74,7 @@ router.put('/purchase/:id', ensureAuthenticated, ensureSuper, purchaseController
 // *************************************** SALES ROUTES ********************************************** //
 router.post('/sales', ensureAuthenticated, ensureSuper, saleController.create);
 router.get('/sales', ensureAuthenticated, saleController.read);
+router.get('/sales/paged', ensureAuthenticated, saleController.readSalesPaged);
 router.get('/sales/:id', ensureAuthenticated, saleController.readById);
 router.delete('/sales/:id', ensureAuthenticated, ensureSuper, saleController.deleteById);
 router.put('/sales/:id', ensureAuthenticated, ensureSuper, saleController.updateById);
