@@ -1,4 +1,5 @@
 import { EnumTypeSale } from '../entities/Sale';
+import { IProduct } from './IProduct';
 
 export interface ISale {
   id?: number;
@@ -8,6 +9,6 @@ export interface ISale {
   amount: number;
   created_at?: Date;
   updated_at?: Date;
-  product_id: number;
   client_id?: number;
+  data_product?: IProduct;
 }

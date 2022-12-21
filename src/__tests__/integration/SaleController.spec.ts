@@ -2,6 +2,7 @@ import request from 'supertest';
 import { getConnection, getCustomRepository } from 'typeorm';
 import { app } from '../../app';
 import createConnection from '../../database';
+import { EnumTypeProduct } from '../../entities/Product';
 import { EnumTypeSale } from '../../entities/Sale';
 import { SaleRepository } from '../../repositories/SaleRepository';
 
@@ -14,13 +15,24 @@ const loginUser = {
   password: '123456',
 };
 
+const dataProduct = {
+  id: 1,
+  name: 'Salgadinho Cheetos',
+  type: EnumTypeProduct.GENERAL,
+  price: 3.5,
+  status: true,
+  created_at: '2022-12-21T17:54:28.122Z',
+  updated_at: '2022-12-21T17:54:28.122Z',
+  description: 'Salgadinho Cheetos Descrição',
+};
+
 const createSale = {
   total: 15,
   type_sale: EnumTypeSale.MONEY,
   observation: 'Pago 10 reais no pix e 5 reais no dinheiro',
   amount: 1,
-  product_id: 2,
   client_id: 2,
+  data_product: dataProduct,
 };
 
 const editedSale = {
@@ -28,8 +40,8 @@ const editedSale = {
   type_sale: EnumTypeSale.PIX,
   observation: 'Valor alterado - R$ 0,50',
   amount: 2,
-  product_id: 3,
   client_id: 3,
+  data_product: dataProduct,
 };
 
 let token: string;
@@ -61,7 +73,7 @@ describe('Sales', () => {
     expect(response.body.type_sale).toBe(createSale.type_sale);
     expect(response.body.observation).toBe(createSale.observation);
     expect(response.body.amount).toBe(createSale.amount);
-    expect(response.body.product_id).toBe(createSale.product_id);
+    expect(response.body.data_product).toStrictEqual(createSale.data_product);
     expect(response.body.client_id).toBe(createSale.client_id);
   });
 
@@ -73,7 +85,7 @@ describe('Sales', () => {
         type_sale: EnumTypeSale.MONEY,
         observation: 'Pago 10 reais no pix e 5 reais no dinheiro',
         amount: 1,
-        product_id: 2,
+        data_product: dataProduct,
         client_id: 2,
       });
 
@@ -89,7 +101,7 @@ describe('Sales', () => {
         type_sale: EnumTypeSale.MONEY,
         total: 15,
         observation: 'Pago 10 reais no pix e 5 reais no dinheiro',
-        product_id: 2,
+        data_product: dataProduct,
         client_id: 2,
       });
 
@@ -105,7 +117,7 @@ describe('Sales', () => {
         total: 15,
         observation: 'Pago 10 reais no pix e 5 reais no dinheiro',
         amount: 1,
-        product_id: 2,
+        data_product: dataProduct,
         client_id: 2,
       });
 
@@ -113,7 +125,7 @@ describe('Sales', () => {
     expect(response.body.message).toBe('Type_sale is required');
   });
 
-  it('Should returns 400 because there is no sale product_id', async () => {
+  it('Should returns 400 because there is no sale data_product', async () => {
     const response = await request(app)
       .post('/sales')
       .set('Authorization', `bearer ${token}`)
@@ -126,7 +138,9 @@ describe('Sales', () => {
       });
 
     expect(response.status).toBe(400);
-    expect(response.body.message).toBe('Product_id is required');
+    expect(response.body.message).toBe(
+      'Id data_product is required, Name data_product is required, Price data_product is required',
+    );
   });
 
   // testes para atualização de venda
@@ -144,7 +158,7 @@ describe('Sales', () => {
     expect(saleUpdated.type_sale).toBe(editedSale.type_sale);
     expect(saleUpdated.observation).toBe(editedSale.observation);
     expect(saleUpdated.amount).toBe(editedSale.amount);
-    expect(saleUpdated.product_id).toBe(editedSale.product_id);
+    expect(saleUpdated.data_product).toStrictEqual(editedSale.data_product);
     expect(saleUpdated.client_id).toBe(editedSale.client_id);
     expect(response.body.message).toBe('Sale updated successfully');
   });
@@ -182,7 +196,7 @@ describe('Sales', () => {
     expect(response.body.type_sale).toBe(editedSale.type_sale);
     expect(response.body.observation).toBe(editedSale.observation);
     expect(response.body.amount).toBe(editedSale.amount);
-    expect(response.body.product_id).toBe(editedSale.product_id);
+    expect(response.body.data_product).toStrictEqual(editedSale.data_product);
     expect(response.body.client_id).toBe(editedSale.client_id);
   });
 

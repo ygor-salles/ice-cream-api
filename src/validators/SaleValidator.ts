@@ -1,5 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 import * as yup from 'yup';
+import { EnumTypeProduct } from '../entities/Product';
 import { EnumTypeSale } from '../entities/Sale';
 import { SaleRepository } from '../repositories/SaleRepository';
 
@@ -19,8 +20,18 @@ class SaleValidator {
         .required('Type_sale is required'),
       observation: yup.string().optional(),
       amount: yup.number().required('Amount is required'),
-      product_id: yup.number().required('Product_id is required'),
       client_id: yup.number().optional(),
+      data_product: yup
+        .object()
+        .shape({
+          id: yup.number().required('Id data_product is required'),
+          name: yup.string().required('Name data_product is required'),
+          price: yup.number().required('Price data_product is required'),
+          description: yup.string().optional(),
+          type: yup.mixed<EnumTypeProduct>().oneOf(Object.values(EnumTypeProduct)).optional(),
+          status: yup.boolean().optional(),
+        })
+        .required('Data_product is required'),
     });
   }
 
@@ -31,8 +42,18 @@ class SaleValidator {
       type_sale: yup.mixed<EnumTypeSale>().oneOf(Object.values(EnumTypeSale)).optional(),
       observation: yup.string().optional(),
       amount: yup.number().optional(),
-      product_id: yup.number().optional(),
       client_id: yup.number().optional(),
+      data_product: yup
+        .object()
+        .shape({
+          id: yup.number().required('Id data_product is required'),
+          name: yup.string().required('Name data_product is required'),
+          price: yup.number().required('Price data_product is required'),
+          description: yup.string().optional(),
+          type: yup.mixed<EnumTypeProduct>().oneOf(Object.values(EnumTypeProduct)).optional(),
+          status: yup.boolean().optional(),
+        })
+        .optional(),
     });
   }
 

@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { IProduct } from '../dtos/IProduct';
 import { Client } from './Client';
 import { Product } from './Product';
 
@@ -42,19 +43,15 @@ class Sale {
   @UpdateDateColumn()
   updated_at: Date;
 
+  @Column({ type: 'simple-json' })
+  data_product: IProduct;
+
   @Column()
   client_id: number;
 
   @ManyToOne(() => Client)
   @JoinColumn({ name: 'client_id' })
   client: Client;
-
-  @Column()
-  product_id?: number;
-
-  @ManyToOne(() => Product)
-  @JoinColumn({ name: 'product_id' })
-  product: Product;
 }
 
 export { Sale };

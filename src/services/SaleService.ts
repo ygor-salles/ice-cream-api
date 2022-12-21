@@ -17,12 +17,12 @@ class SaleService {
   }
 
   async read() {
-    const allSales = await this.repositorySale.find();
+    const allSales = await this.repositorySale.find({ relations: ['client'] });
     return allSales;
   }
 
   async readById(id: number) {
-    const sale = await this.repositorySale.findOne(id);
+    const sale = await this.repositorySale.findOne(id, { relations: ['client'] });
     return sale;
   }
 

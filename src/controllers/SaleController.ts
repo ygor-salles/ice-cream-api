@@ -13,7 +13,7 @@ class SaleController {
     try {
       await saleValidator.createValidaton().validate(data, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message || error);
+      throw new ApiError(400, error.errors.join(', ') || error);
     }
 
     const saleService = new SaleService();
