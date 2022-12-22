@@ -17,7 +17,10 @@ class SaleService {
   }
 
   async read() {
-    const allSales = await this.repositorySale.find({ relations: ['client'] });
+    const allSales = await this.repositorySale.find({
+      relations: ['client'],
+      order: { updated_at: 'DESC' },
+    });
     return allSales;
   }
 

@@ -17,7 +17,7 @@ class ProviderService {
   }
 
   async read() {
-    const allProviders = await this.repositoryProvider.find();
+    const allProviders = await this.repositoryProvider.find({ order: { updated_at: 'DESC' } });
     return allProviders;
   }
 

@@ -17,7 +17,7 @@ class ProductService {
   }
 
   async read() {
-    const allProducts = await this.repositoryProduct.find();
+    const allProducts = await this.repositoryProduct.find({ order: { updated_at: 'DESC' } });
     return allProducts;
   }
 

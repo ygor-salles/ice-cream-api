@@ -17,7 +17,7 @@ class PurchaseService {
   }
 
   async read() {
-    const allPurchases = await this.repositoryPurchase.find();
+    const allPurchases = await this.repositoryPurchase.find({ order: { updated_at: 'DESC' } });
     return allPurchases;
   }
 

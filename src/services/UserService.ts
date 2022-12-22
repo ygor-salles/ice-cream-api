@@ -21,6 +21,7 @@ class UserService {
   async read() {
     const allUsers = await this.repositoryUser.find({
       select: ['id', 'name', 'email', 'role', 'created_at', 'updated_at'],
+      order: { updated_at: 'DESC' },
     });
     return allUsers;
   }

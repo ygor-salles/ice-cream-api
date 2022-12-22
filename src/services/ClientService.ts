@@ -17,7 +17,7 @@ class ClientService {
   }
 
   async read() {
-    const allClients = await this.repositoryClient.find();
+    const allClients = await this.repositoryClient.find({ order: { updated_at: 'DESC' } });
     return allClients;
   }
 

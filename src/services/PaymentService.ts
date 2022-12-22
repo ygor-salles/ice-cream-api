@@ -17,7 +17,10 @@ class PaymentService {
   }
 
   async read() {
-    const allPayments = await this.repositoryPayment.find({ relations: ['client'] });
+    const allPayments = await this.repositoryPayment.find({
+      relations: ['client'],
+      order: { updated_at: 'DESC' },
+    });
     return allPayments;
   }
 

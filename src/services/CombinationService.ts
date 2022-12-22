@@ -17,7 +17,9 @@ class CombinationService {
   }
 
   async read() {
-    const allCombinations = await this.repositoryCombination.find();
+    const allCombinations = await this.repositoryCombination.find({
+      order: { updated_at: 'DESC' },
+    });
     return allCombinations;
   }
 
