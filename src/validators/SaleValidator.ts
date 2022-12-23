@@ -27,7 +27,7 @@ class SaleValidator {
           id: yup.number().required('Id data_product is required'),
           name: yup.string().required('Name data_product is required'),
           price: yup.number().required('Price data_product is required'),
-          description: yup.string().optional(),
+          description: yup.string().nullable().optional(),
           type: yup.mixed<EnumTypeProduct>().oneOf(Object.values(EnumTypeProduct)).optional(),
           status: yup.boolean().optional(),
         })

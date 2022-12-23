@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 import {
+  AfterInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -10,8 +11,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { IProduct } from '../dtos/IProduct';
+import { HookSale } from '../hooks/HookSale';
 import { Client } from './Client';
-import { Product } from './Product';
 
 export enum EnumTypeSale {
   PIX = 'PIX',
@@ -52,6 +53,13 @@ class Sale {
   @ManyToOne(() => Client)
   @JoinColumn({ name: 'client_id' })
   client: Client;
+
+  @AfterInsert()
+  async afterInsert(): Promise<void> {
+    if (this.type_sale === EnumTypeSale.DEBIT) {
+      await HookSale.updateDebitClient(this.total, this.client_id);
+    }
+  }
 }
 
 export { Sale };
