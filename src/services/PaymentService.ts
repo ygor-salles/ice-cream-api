@@ -30,7 +30,8 @@ class PaymentService {
   }
 
   async deleteById(id: number) {
-    await this.repositoryPayment.delete(id);
+    const payment = await this.repositoryPayment.findOne(id);
+    await this.repositoryPayment.remove(payment);
   }
 
   async updateById(id: number, data: IPayment) {

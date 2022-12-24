@@ -2,6 +2,7 @@
 /* eslint-disable no-shadow */
 import {
   AfterInsert,
+  AfterRemove,
   Column,
   CreateDateColumn,
   Entity,
@@ -58,6 +59,13 @@ class Sale {
   async afterInsert(): Promise<void> {
     if (this.type_sale === EnumTypeSale.DEBIT) {
       await HookSale.updateDebitClient(this.total, this.client_id);
+    }
+  }
+
+  @AfterRemove()
+  async afterRemove(): Promise<void> {
+    if (this.type_sale === EnumTypeSale.DEBIT) {
+      await HookSale.afterRemovedSaleUpdateDebitClient(this.total, this.client_id);
     }
   }
 }

@@ -8,9 +8,23 @@ class HookPayment {
     const client = await repositoryClient.findOne({ id: client_id });
 
     client.debit -= value;
+    client.updated_at = new Date();
     if (client.debit < 0) {
       throw new ApiError(400, 'Attention! Payment greater than debit. Operation not completed!');
     }
+    await repositoryClient.update({ id: client_id }, client);
+  }
+
+  public static async afterRemovedPaymentUpdateDebitClient(
+    value: number,
+    client_id: number,
+  ): Promise<void> {
+    const repositoryClient = getCustomRepository(ClientRepository);
+    const client = await repositoryClient.findOne({ id: client_id });
+
+    client.debit += value;
+    client.updated_at = new Date();
+
     await repositoryClient.update({ id: client_id }, client);
   }
 }

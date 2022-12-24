@@ -62,7 +62,6 @@ router.post('/payments', ensureAuthenticated, ensureSuper, paymentController.cre
 router.get('/payments', ensureAuthenticated, paymentController.read);
 router.get('/payments/:id', ensureAuthenticated, paymentController.readById);
 router.delete('/payments/:id', ensureAuthenticated, ensureSuper, paymentController.deleteById);
-router.put('/payments/:id', ensureAuthenticated, ensureSuper, paymentController.updateById);
 
 // *************************************** PURCHASE ROUTES ********************************************** //
 router.post('/purchase', ensureAuthenticated, ensureSuper, purchaseController.create);

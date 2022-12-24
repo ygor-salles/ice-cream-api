@@ -54,7 +54,8 @@ class SaleService {
   }
 
   async deleteById(id: number) {
-    await this.repositorySale.delete(id);
+    const sale = await this.repositorySale.findOne(id);
+    await this.repositorySale.remove(sale);
   }
 
   async updateById(id: number, data: ISale) {

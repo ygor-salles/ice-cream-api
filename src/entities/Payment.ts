@@ -1,5 +1,6 @@
 import {
   AfterInsert,
+  AfterRemove,
   Column,
   CreateDateColumn,
   Entity,
@@ -38,6 +39,11 @@ class Payment {
   @AfterInsert()
   async afterInsert(): Promise<void> {
     await HookPayment.updateDebitClient(this.value, this.client_id);
+  }
+
+  @AfterRemove()
+  async afterRemove(): Promise<void> {
+    await HookPayment.afterRemovedPaymentUpdateDebitClient(this.value, this.client_id);
   }
 }
 
