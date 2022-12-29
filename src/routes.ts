@@ -40,7 +40,6 @@ router.put('/users/:id', ensureAuthenticated, ensureSuper, userController.update
 router.post('/clients', ensureAuthenticated, ensureSuper, clientController.create);
 router.get('/clients', ensureAuthenticated, clientController.read);
 router.get('/clients/:id', ensureAuthenticated, clientController.readById);
-router.delete('/clients/:id', ensureAuthenticated, ensureSuper, clientController.deleteById);
 router.put('/clients/:id', ensureAuthenticated, ensureSuper, clientController.updateById);
 
 // *************************************** PROVIDER ROUTES ********************************************** //
