@@ -1,6 +1,5 @@
 import { getCustomRepository } from 'typeorm';
 import * as yup from 'yup';
-import { EnumTypeProduct } from '../entities/Product';
 import { EnumTypeSale } from '../entities/Sale';
 import { SaleRepository } from '../repositories/SaleRepository';
 
@@ -27,9 +26,6 @@ class SaleValidator {
           id: yup.number().required('Id data_product is required'),
           name: yup.string().required('Name data_product is required'),
           price: yup.number().required('Price data_product is required'),
-          description: yup.string().nullable().optional(),
-          type: yup.mixed<EnumTypeProduct>().oneOf(Object.values(EnumTypeProduct)).optional(),
-          status: yup.boolean().optional(),
         })
         .required('Data_product is required'),
     });
@@ -49,9 +45,6 @@ class SaleValidator {
           id: yup.number().required('Id data_product is required'),
           name: yup.string().required('Name data_product is required'),
           price: yup.number().required('Price data_product is required'),
-          description: yup.string().optional(),
-          type: yup.mixed<EnumTypeProduct>().oneOf(Object.values(EnumTypeProduct)).optional(),
-          status: yup.boolean().optional(),
         })
         .optional(),
     });
