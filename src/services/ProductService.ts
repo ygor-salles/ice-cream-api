@@ -17,12 +17,15 @@ class ProductService {
   }
 
   async read() {
-    const allProducts = await this.repositoryProduct.find({ order: { updated_at: 'DESC' } });
+    const allProducts = await this.repositoryProduct.find({
+      order: { updated_at: 'DESC' },
+      relations: ['combinations'],
+    });
     return allProducts;
   }
 
   async readById(id: number) {
-    const product = await this.repositoryProduct.findOne(id);
+    const product = await this.repositoryProduct.findOne(id, { relations: ['combinations'] });
     return product;
   }
 

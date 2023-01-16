@@ -19,7 +19,6 @@ class CombinationValidator {
     return yup.object().shape({
       name: yup.string().required('Name is required'),
       price: yup.number().required('Price is required'),
-      product_id: yup.number().required('Product_id is required'),
     });
   }
 
@@ -28,7 +27,6 @@ class CombinationValidator {
       id: yup.number().required('Id is required in params'),
       name: yup.string().optional(),
       price: yup.number().optional(),
-      product_id: yup.number().optional(),
     });
   }
 

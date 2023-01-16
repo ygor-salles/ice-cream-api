@@ -26,6 +26,18 @@ class ProductValidator {
         .oneOf(Object.values(EnumTypeProduct))
         .required('Type_product is required'),
       status: yup.boolean().optional(),
+      combinations: yup
+        .array()
+        .of(
+          yup.object().shape({
+            id: yup.number(),
+            name: yup.string(),
+            price: yup.number(),
+            created_at: yup.date(),
+            updated_at: yup.date(),
+          }),
+        )
+        .optional(),
     });
   }
 
@@ -37,6 +49,18 @@ class ProductValidator {
       description: yup.string().optional(),
       type: yup.mixed<EnumTypeProduct>().oneOf(Object.values(EnumTypeProduct)).optional(),
       status: yup.boolean().optional(),
+      combinations: yup
+        .array()
+        .of(
+          yup.object().shape({
+            id: yup.number(),
+            name: yup.string(),
+            price: yup.number(),
+            created_at: yup.date(),
+            updated_at: yup.date(),
+          }),
+        )
+        .optional(),
     });
   }
 

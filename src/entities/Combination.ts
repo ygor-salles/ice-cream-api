@@ -2,8 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -26,12 +25,8 @@ class Combination {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @Column()
-  product_id: number;
-
-  @ManyToOne(() => Product)
-  @JoinColumn({ name: 'product_id' })
-  product: Product;
+  @ManyToMany(() => Product, product => product.combinations)
+  products: Product[];
 }
 
 export { Combination };

@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-shadow */
 import {
   AfterInsert,
   AfterRemove,
