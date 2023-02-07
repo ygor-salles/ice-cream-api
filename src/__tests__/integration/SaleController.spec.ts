@@ -175,13 +175,13 @@ describe('Sales', () => {
     );
   });
 
-  it('Should return 404 for update missing id sale', async () => {
+  it('Should return 400 for update missing id sale', async () => {
     const response = await request(app)
       .put(`/sales/${idInexist}`)
       .set('Authorization', `bearer ${token}`)
       .send(editedSale);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('Sale does not exist');
   });
 
@@ -200,12 +200,12 @@ describe('Sales', () => {
     expect(response.body.client_id).toBe(editedSale.client_id);
   });
 
-  it('Should return 404 for searching missing id sale', async () => {
+  it('Should return 400 for searching missing id sale', async () => {
     const response = await request(app)
       .get(`/sales/${idInexist}`)
       .set('Authorization', `bearer ${token}`);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('Sale does not exist');
   });
 
@@ -254,12 +254,12 @@ describe('Sales', () => {
     );
   });
 
-  it('Should return 404 for delete missing id sale', async () => {
+  it('Should return 400 for delete missing id sale', async () => {
     const response = await request(app)
       .delete(`/sales/${idInexist}`)
       .set('Authorization', `bearer ${token}`);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('Sale does not exist');
   });
 });

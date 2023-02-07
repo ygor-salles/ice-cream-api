@@ -12,5 +12,5 @@ export async function ensureSuper(request: Request, response: Response, next: Ne
     return next();
   }
 
-  return response.status(401).json({ message: 'Usuário não autorizado!' });
+  response.status(401).json({ message: 'Usuário não autorizado!' });
 }

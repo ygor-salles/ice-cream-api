@@ -186,13 +186,13 @@ describe('Users', () => {
     );
   });
 
-  it('Should return 404 for update missing id user', async () => {
+  it('Should return 400 for update missing id user', async () => {
     const response = await request(app)
       .put(`/users/${idInexist}`)
       .set('Authorization', `bearer ${token}`)
       .send(editedUser);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('User does not exist');
   });
 
@@ -208,12 +208,12 @@ describe('Users', () => {
     expect(response.body.role).toBe(editedUser.role);
   });
 
-  it('Should return 404 for searching missing id user', async () => {
+  it('Should return 400 for searching missing id user', async () => {
     const response = await request(app)
       .get(`/users/${idInexist}`)
       .set('Authorization', `bearer ${token}`);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('User does not exist');
   });
 
@@ -262,12 +262,12 @@ describe('Users', () => {
     );
   });
 
-  it('Should return 404 for delete missing id user', async () => {
+  it('Should return 400 for delete missing id user', async () => {
     const response = await request(app)
       .delete(`/users/${idInexist}`)
       .set('Authorization', `bearer ${token}`);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('User does not exist');
   });
 });

@@ -20,20 +20,20 @@ class PurchaseController {
         throw 'Image is required or invalid extension. It should be only (png, jpg, jpeg, pjpeg, gif, svg)';
       }
     } catch (error) {
-      throw new ApiError(400, error.errors.join(', ') || error);
+      throw new ApiError(400, error?.errors?.join(', ') || error);
     }
 
     data.nf_url = (await uploadImage(data, 'nf_url', request)) || '';
 
     const purchaseService = new PurchaseService();
     const purchase = await purchaseService.create(data);
-    return response.status(201).json(purchase);
+    response.status(201).json(purchase);
   }
 
   async read(request: Request, response: Response) {
     const purchaseService = new PurchaseService();
     const purchase = await purchaseService.read();
-    return response.status(200).json(purchase);
+    response.status(200).json(purchase);
   }
 
   async readById(request: Request, response: Response) {
@@ -43,13 +43,13 @@ class PurchaseController {
     try {
       await purchaseValidator.readByIdValidation().validate({ id: +id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(error.message ? 400 : 404, error.message || error);
+      throw new ApiError(400, error?.errors?.join(', ') || error);
     }
-    if (!(await purchaseValidator.idExist(+id))) throw new ApiError(404, 'Purchase does not exist');
+    if (!(await purchaseValidator.idExist(+id))) throw new ApiError(400, 'Purchase does not exist');
 
     const purchaseService = new PurchaseService();
     const purchase = await purchaseService.readById(+id);
-    return response.status(200).json(purchase);
+    response.status(200).json(purchase);
   }
 
   async deleteById(request: Request, response: Response) {
@@ -59,15 +59,15 @@ class PurchaseController {
     try {
       await purchaseValidator.deleteByIdValidation().validate({ id: +id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.errors.join(', ') || error);
+      throw new ApiError(400, error?.errors?.join(', ') || error);
     }
-    if (!(await purchaseValidator.idExist(+id))) throw new ApiError(404, 'Purchase does not exist');
+    if (!(await purchaseValidator.idExist(+id))) throw new ApiError(400, 'Purchase does not exist');
 
     const purchaseService = new PurchaseService();
     await removeImage(Number(id), purchaseService);
 
     await purchaseService.deleteById(+id);
-    return response.status(200).json({ message: 'Purchase deleted successfully' });
+    response.status(200).json({ message: 'Purchase deleted successfully' });
   }
 
   async updateById(request: Request, response: Response) {
@@ -82,9 +82,9 @@ class PurchaseController {
         .updateValidation()
         .validate({ id: +id, ...data }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(error.message ? 400 : 404, error.message || error);
+      throw new ApiError(400, error?.errors?.join(', ') || error);
     }
-    if (!(await purchaseValidator.idExist(+id))) throw new ApiError(404, 'Purchase does not exist');
+    if (!(await purchaseValidator.idExist(+id))) throw new ApiError(400, 'Purchase does not exist');
 
     const purchaseService = new PurchaseService();
     if (request.file) {
@@ -93,7 +93,7 @@ class PurchaseController {
     }
 
     await purchaseService.updateById(+id, data);
-    return response.status(200).json({ message: 'Purchase updated successfully' });
+    response.status(200).json({ message: 'Purchase updated successfully' });
   }
 }
 

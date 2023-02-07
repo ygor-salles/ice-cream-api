@@ -12,20 +12,20 @@ class ProviderController {
     try {
       await providerValidator.createValidaton().validate(data, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message || error);
+      throw new ApiError(400, error?.errors?.join(', ') || error);
     }
     if (await providerValidator.nameExist(data.name))
       throw new ApiError(400, 'Provider already exists');
 
     const providerService = new ProviderService();
     const provider = await providerService.create(data);
-    return response.status(201).json(provider);
+    response.status(201).json(provider);
   }
 
   async read(request: Request, response: Response) {
     const providerService = new ProviderService();
     const provider = await providerService.read();
-    return response.status(200).json(provider);
+    response.status(200).json(provider);
   }
 
   async readById(request: Request, response: Response) {
@@ -35,13 +35,13 @@ class ProviderController {
     try {
       await providerValidator.readByIdValidation().validate({ id: +id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(error.message ? 400 : 404, error.message || error);
+      throw new ApiError(400, error?.errors?.join(', ') || error);
     }
-    if (!(await providerValidator.idExist(+id))) throw new ApiError(404, 'Provider does not exist');
+    if (!(await providerValidator.idExist(+id))) throw new ApiError(400, 'Provider does not exist');
 
     const providerService = new ProviderService();
     const provider = await providerService.readById(+id);
-    return response.status(200).json(provider);
+    response.status(200).json(provider);
   }
 
   async updateById(request: Request, response: Response) {
@@ -54,13 +54,13 @@ class ProviderController {
         .updateValidation()
         .validate({ id: +id, ...data }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(error.message ? 400 : 404, error.message || error);
+      throw new ApiError(400, error?.errors?.join(', ') || error);
     }
-    if (!(await providerValidator.idExist(+id))) throw new ApiError(404, 'Provider does not exist');
+    if (!(await providerValidator.idExist(+id))) throw new ApiError(400, 'Provider does not exist');
 
     const providerService = new ProviderService();
     await providerService.updateById(+id, data);
-    return response.status(200).json({ message: 'Provider updated successfully' });
+    response.status(200).json({ message: 'Provider updated successfully' });
   }
 
   async deleteById(request: Request, response: Response) {
@@ -70,13 +70,13 @@ class ProviderController {
     try {
       await providerValidator.deleteByIdValidation().validate({ id: +id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(error.message ? 400 : 404, error.message || error);
+      throw new ApiError(400, error?.errors?.join(', ') || error);
     }
-    if (!(await providerValidator.idExist(+id))) throw new ApiError(404, 'Provider does not exist');
+    if (!(await providerValidator.idExist(+id))) throw new ApiError(400, 'Provider does not exist');
 
     const providerService = new ProviderService();
     await providerService.deleteById(+id);
-    return response.status(200).json({ message: 'Provider deleted successfully' });
+    response.status(200).json({ message: 'Provider deleted successfully' });
   }
 }
 

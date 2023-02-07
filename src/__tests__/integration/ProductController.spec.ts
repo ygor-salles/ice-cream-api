@@ -127,13 +127,13 @@ describe('Products', () => {
     );
   });
 
-  it('Should return 404 for update missing id product', async () => {
+  it('Should return 400 for update missing id product', async () => {
     const response = await request(app)
       .put(`/products/${idInexist}`)
       .set('Authorization', `bearer ${token}`)
       .send(editedProduct);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('Product does not exist');
   });
 
@@ -149,12 +149,12 @@ describe('Products', () => {
     expect(response.body.description).toBe(editedProduct.description);
   });
 
-  it('Should return 404 for searching missing id product', async () => {
+  it('Should return 400 for searching missing id product', async () => {
     const response = await request(app)
       .get(`/products/${idInexist}`)
       .set('Authorization', `bearer ${token}`);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('Product does not exist');
   });
 
@@ -205,12 +205,12 @@ describe('Products', () => {
     );
   });
 
-  it('Should return 404 for delete missing id product', async () => {
+  it('Should return 400 for delete missing id product', async () => {
     const response = await request(app)
       .delete(`/products/${idInexist}`)
       .set('Authorization', `bearer ${token}`);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('Product does not exist');
   });
 });

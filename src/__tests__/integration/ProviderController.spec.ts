@@ -136,13 +136,13 @@ describe('Providers', () => {
     );
   });
 
-  it('Should return 404 for update missing id provider', async () => {
+  it('Should return 400 for update missing id provider', async () => {
     const response = await request(app)
       .put(`/providers/${idInexist}`)
       .set('Authorization', `bearer ${token}`)
       .send(editedProvider);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('Provider does not exist');
   });
 
@@ -158,12 +158,12 @@ describe('Providers', () => {
     expect(response.body.its_ice_cream_shoop).toBe(editedProvider.its_ice_cream_shoop);
   });
 
-  it('Should return 404 for searching missing id provider', async () => {
+  it('Should return 400 for searching missing id provider', async () => {
     const response = await request(app)
       .get(`/providers/${idInexist}`)
       .set('Authorization', `bearer ${token}`);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('Provider does not exist');
   });
 
@@ -214,12 +214,12 @@ describe('Providers', () => {
     );
   });
 
-  it('Should return 404 for delete missing id provider', async () => {
+  it('Should return 400 for delete missing id provider', async () => {
     const response = await request(app)
       .delete(`/providers/${idInexist}`)
       .set('Authorization', `bearer ${token}`);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('Provider does not exist');
   });
 });

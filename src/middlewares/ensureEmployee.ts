@@ -12,5 +12,5 @@ export async function ensureEmployee(request: Request, response: Response, next:
     return next();
   }
 
-  return response.status(401).json({ message: 'Usuário não autorizado!' });
+  response.status(401).json({ message: 'Usuário não autorizado!' });
 }

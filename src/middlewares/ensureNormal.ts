@@ -16,5 +16,5 @@ export async function ensureNormal(request: Request, response: Response, next: N
     return next();
   }
 
-  return response.status(401).json({ message: 'Usuário não autorizado!' });
+  response.status(401).json({ message: 'Usuário não autorizado!' });
 }

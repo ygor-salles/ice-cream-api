@@ -13,18 +13,18 @@ class SaleController {
     try {
       await saleValidator.createValidaton().validate(data, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.errors.join(', ') || error);
+      throw new ApiError(400, error?.errors?.join(', ') || error);
     }
 
     const saleService = new SaleService();
     const sale = await saleService.create(data);
-    return response.status(201).json(sale);
+    response.status(201).json(sale);
   }
 
   async read(request: Request, response: Response) {
     const saleService = new SaleService();
     const sale = await saleService.read();
-    return response.status(200).json(sale);
+    response.status(200).json(sale);
   }
 
   async readById(request: Request, response: Response) {
@@ -34,13 +34,13 @@ class SaleController {
     try {
       await saleValidator.readByIdValidation().validate({ id: +id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(error.message ? 400 : 404, error.message || error);
+      throw new ApiError(400, error?.errors?.join(', ') || error);
     }
-    if (!(await saleValidator.idExist(+id))) throw new ApiError(404, 'Sale does not exist');
+    if (!(await saleValidator.idExist(+id))) throw new ApiError(400, 'Sale does not exist');
 
     const saleService = new SaleService();
     const sale = await saleService.readById(+id);
-    return response.status(200).json(sale);
+    response.status(200).json(sale);
   }
 
   async deleteById(request: Request, response: Response) {
@@ -50,13 +50,13 @@ class SaleController {
     try {
       await saleValidator.deleteByIdValidation().validate({ id: +id }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(error.message ? 400 : 404, error.message || error);
+      throw new ApiError(400, error?.errors?.join(', ') || error);
     }
-    if (!(await saleValidator.idExist(+id))) throw new ApiError(404, 'Sale does not exist');
+    if (!(await saleValidator.idExist(+id))) throw new ApiError(400, 'Sale does not exist');
 
     const saleService = new SaleService();
     await saleService.deleteById(+id);
-    return response.status(200).json({ message: 'Sale deleted successfully' });
+    response.status(200).json({ message: 'Sale deleted successfully' });
   }
 
   async updateById(request: Request, response: Response) {
@@ -67,13 +67,13 @@ class SaleController {
     try {
       await saleValidator.updateValidation().validate({ id: +id, ...data }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(error.message ? 400 : 404, error.message || error);
+      throw new ApiError(400, error?.errors?.join(', ') || error);
     }
-    if (!(await saleValidator.idExist(+id))) throw new ApiError(404, 'Sale does not exist');
+    if (!(await saleValidator.idExist(+id))) throw new ApiError(400, 'Sale does not exist');
 
     const saleService = new SaleService();
     await saleService.updateById(+id, data);
-    return response.status(200).json({ message: 'Sale updated successfully' });
+    response.status(200).json({ message: 'Sale updated successfully' });
   }
 
   async readSalesPaged(request: Request, response: Response) {
@@ -85,12 +85,12 @@ class SaleController {
     try {
       await validator.readPagedValidation().validate({ limit, page }, { abortEarly: false });
     } catch (error) {
-      throw new ApiError(400, error.message || error);
+      throw new ApiError(400, error?.errors?.join(', ') || error);
     }
 
     const saleService = new SaleService();
     const allSalesPaged = await saleService.readSalesPaged(limit, page);
-    return response.status(200).json(allSalesPaged);
+    response.status(200).json(allSalesPaged);
   }
 }
 

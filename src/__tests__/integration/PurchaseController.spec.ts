@@ -104,13 +104,13 @@ describe('Purchases', () => {
     );
   });
 
-  it('Should return 404 for update missing id purchase', async () => {
+  it('Should return 400 for update missing id purchase', async () => {
     const response = await request(app)
       .put(`/purchase/${idInexist}`)
       .set('Authorization', `bearer ${token}`)
       .send(editedPurchase);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('Purchase does not exist');
   });
 
@@ -127,12 +127,12 @@ describe('Purchases', () => {
     expect(response.body.its_ice_cream_shoop).toBe(editedPurchase.its_ice_cream_shoop);
   });
 
-  it('Should return 404 for searching missing id purchase', async () => {
+  it('Should return 400 for searching missing id purchase', async () => {
     const response = await request(app)
       .get(`/purchase/${idInexist}`)
       .set('Authorization', `bearer ${token}`);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('Purchase does not exist');
   });
 
@@ -183,12 +183,12 @@ describe('Purchases', () => {
     );
   });
 
-  it('Should return 404 for delete missing id purchase', async () => {
+  it('Should return 400 for delete missing id purchase', async () => {
     const response = await request(app)
       .delete(`/purchase/${idInexist}`)
       .set('Authorization', `bearer ${token}`);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('Purchase does not exist');
   });
 });

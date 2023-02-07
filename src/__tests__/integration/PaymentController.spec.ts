@@ -146,13 +146,13 @@ describe('Payments', () => {
     );
   });
 
-  it('Should return 404 for update missing id payment', async () => {
+  it('Should return 400 for update missing id payment', async () => {
     const response = await request(app)
       .put(`/payments/${idInexist}`)
       .set('Authorization', `bearer ${token}`)
       .send(editedPayment);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('Payment does not exist');
   });
 
@@ -168,12 +168,12 @@ describe('Payments', () => {
     expect(response.body.client_id).toBe(editedPayment.client_id);
   });
 
-  it('Should return 404 for searching missing id payment', async () => {
+  it('Should return 400 for searching missing id payment', async () => {
     const response = await request(app)
       .get(`/payments/${idInexist}`)
       .set('Authorization', `bearer ${token}`);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('Payment does not exist');
   });
 
@@ -224,12 +224,12 @@ describe('Payments', () => {
     );
   });
 
-  it('Should return 404 for delete missing id payment', async () => {
+  it('Should return 400 for delete missing id payment', async () => {
     const response = await request(app)
       .delete(`/payments/${idInexist}`)
       .set('Authorization', `bearer ${token}`);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('Payment does not exist');
   });
 });

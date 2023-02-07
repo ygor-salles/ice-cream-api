@@ -136,13 +136,13 @@ describe('Clients', () => {
     );
   });
 
-  it('Should return 404 for update missing id client', async () => {
+  it('Should return 400 for update missing id client', async () => {
     const response = await request(app)
       .put(`/clients/${idInexist}`)
       .set('Authorization', `bearer ${token}`)
       .send(editedClient);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('Client does not exist');
   });
 
@@ -158,12 +158,12 @@ describe('Clients', () => {
     expect(response.body.debit).toBe(editedClient.debit);
   });
 
-  it('Should return 404 for searching missing id client', async () => {
+  it('Should return 400 for searching missing id client', async () => {
     const response = await request(app)
       .get(`/clients/${idInexist}`)
       .set('Authorization', `bearer ${token}`);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('Client does not exist');
   });
 
@@ -212,12 +212,12 @@ describe('Clients', () => {
     );
   });
 
-  it('Should return 404 for delete missing id client', async () => {
+  it('Should return 400 for delete missing id client', async () => {
     const response = await request(app)
       .delete(`/clients/${idInexist}`)
       .set('Authorization', `bearer ${token}`);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(response.body.message).toBe('Client does not exist');
   });
 
