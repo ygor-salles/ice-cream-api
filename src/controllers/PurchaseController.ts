@@ -15,15 +15,13 @@ class PurchaseController {
     const purchaseValidator = new PurchaseValidator();
     try {
       await purchaseValidator.createValidation().validate(data, { abortEarly: false });
-
-      if (!request.file) {
-        throw 'Image is required or invalid extension. It should be only (png, jpg, jpeg, pjpeg, gif, svg)';
-      }
     } catch (error) {
       throw new ApiError(400, error?.errors?.join(', ') || error);
     }
 
-    data.nf_url = (await uploadImage(data, 'nf_url', request)) || '';
+    if (request.file) {
+      data.nf_url = (await uploadImage(data, 'nf_url', request)) || '';
+    }
 
     const purchaseService = new PurchaseService();
     const purchase = await purchaseService.create(data);
