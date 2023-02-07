@@ -21,7 +21,7 @@ class PurchaseValidator {
       value_total: yup.number().optional(),
       observation: yup.string().optional(),
       its_ice_cream_shoop: yup.boolean().optional(),
-      nf_url: yup.string().optional(),
+      provider_id: yup.number().optional(),
     });
   }
 
@@ -30,7 +30,7 @@ class PurchaseValidator {
       value_total: yup.number().required('Value total is required'),
       observation: yup.string().optional(),
       its_ice_cream_shoop: yup.boolean().required('Its_ice_cream_shoop is required'),
-      nf_url: yup.string().required('Nf_url is required'),
+      provider_id: yup.number().required('Provider_id is required'),
     });
   }
 

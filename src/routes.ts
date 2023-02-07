@@ -10,6 +10,7 @@ import { PaymentController } from './controllers/PaymentController';
 import { PurchaseController } from './controllers/PurchaseController';
 import { SaleController } from './controllers/SaleController';
 import { CombinationController } from './controllers/CombinationController';
+import { UPLOAD_IMAGE } from './middlewares/uploadFile';
 
 const router = Router();
 
@@ -63,11 +64,23 @@ router.get('/payments/:id', ensureAuthenticated, paymentController.readById);
 router.delete('/payments/:id', ensureAuthenticated, ensureSuper, paymentController.deleteById);
 
 // *************************************** PURCHASE ROUTES ********************************************** //
-router.post('/purchase', ensureAuthenticated, ensureSuper, purchaseController.create);
+router.post(
+  '/purchase',
+  ensureAuthenticated,
+  ensureSuper,
+  UPLOAD_IMAGE.single('file'),
+  purchaseController.create,
+);
 router.get('/purchase', ensureAuthenticated, purchaseController.read);
 router.get('/purchase/:id', ensureAuthenticated, purchaseController.readById);
 router.delete('/purchase/:id', ensureAuthenticated, ensureSuper, purchaseController.deleteById);
-router.put('/purchase/:id', ensureAuthenticated, ensureSuper, purchaseController.updateById);
+router.put(
+  '/purchase/:id',
+  ensureAuthenticated,
+  ensureSuper,
+  UPLOAD_IMAGE.single('file'),
+  purchaseController.updateById,
+);
 
 // *************************************** SALES ROUTES ********************************************** //
 router.post('/sales', ensureAuthenticated, ensureSuper, saleController.create);
