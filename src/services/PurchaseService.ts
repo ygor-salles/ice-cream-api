@@ -17,12 +17,15 @@ class PurchaseService {
   }
 
   async read() {
-    const allPurchases = await this.repositoryPurchase.find({ order: { updated_at: 'DESC' } });
+    const allPurchases = await this.repositoryPurchase.find({
+      order: { updated_at: 'DESC' },
+      relations: ['provider'],
+    });
     return allPurchases;
   }
 
   async readById(id: number) {
-    const purchase = await this.repositoryPurchase.findOne(id);
+    const purchase = await this.repositoryPurchase.findOne(id, { relations: ['provider'] });
     return purchase;
   }
 
