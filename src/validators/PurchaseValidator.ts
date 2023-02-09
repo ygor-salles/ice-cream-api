@@ -1,12 +1,13 @@
 import * as yup from 'yup';
 import { getCustomRepository } from 'typeorm';
 import { PurchaseRepository } from '../repositories/PurchaseRepository';
+import { Purchase } from '../entities/Purchase';
 
 class PurchaseValidator {
-  async idExist(id: number): Promise<Boolean> {
+  async idExist(id: number): Promise<Purchase> {
     const repository = getCustomRepository(PurchaseRepository);
-    const client = await repository.findOne(id);
-    return !!client;
+    const purchase = await repository.findOne(id);
+    return purchase;
   }
 
   deleteByIdValidation() {

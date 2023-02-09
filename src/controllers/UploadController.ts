@@ -3,7 +3,6 @@ import { Request } from 'express';
 import fs from 'fs';
 
 import { FirebaseStorageService } from '../services/FirebaseStorageService';
-import { PurchaseService } from '../services/PurchaseService';
 
 const firebaseActive = process.env.firebaseActive === 'true';
 const name_app = process.env.name_app || 'Sorveteria';
@@ -24,13 +23,12 @@ export async function uploadImage(data: any, columnImage: string, request: Reque
   return data[columnImage];
 }
 
-export async function removeImage(id: number, purchaseService: PurchaseService) {
+export async function removeImage(id: number, entitie: any, columnImage: string) {
   const storageService = new FirebaseStorageService();
-  const purchaseFound = await purchaseService.readById(id);
-  if (purchaseFound.nf_url.slice(0, 4) === 'http')
-    await storageService.deleteImage(purchaseFound.nf_url);
+  if (entitie[columnImage]?.indexOf('http') !== -1)
+    await storageService.deleteImage(entitie[columnImage]);
   else
-    fs.unlink(purchaseFound.nf_url, err => {
+    fs.unlink(`src/${entitie[columnImage]}`, err => {
       if (err) console.log('Error deleted image repository ->', err.message);
     });
 }
