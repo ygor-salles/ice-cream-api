@@ -19,7 +19,7 @@ export async function uploadImage(data: any, columnImage: string, request: Reque
     fs.writeFile(`./src/uploads/images/${nomeArquivo}`, base64, 'base64', err => {
       if (err) console.log('Error upload image repository ->', err.message);
     });
-    data[columnImage] = `src/uploads/images/${nomeArquivo}` || '';
+    data[columnImage] = `uploads/images/${nomeArquivo}` || '';
   }
   return data[columnImage];
 }

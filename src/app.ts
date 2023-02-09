@@ -10,6 +10,7 @@ import { ApiError } from './validators/Exceptions/ApiError';
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(express.static('src'));
 app.use(router);
 
 // eslint-disable-next-line no-unused-vars
