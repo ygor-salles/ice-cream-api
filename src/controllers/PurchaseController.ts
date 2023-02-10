@@ -87,12 +87,15 @@ class PurchaseController {
     } catch (error) {
       throw new ApiError(400, error?.errors?.join(', ') || error);
     }
-    if (!(await purchaseValidator.idExist(+id))) throw new ApiError(400, 'Purchase does not exist');
+    const purchaseFound = await purchaseValidator.idExist(+id);
+    if (!purchaseFound) {
+      throw new ApiError(400, 'Purchase does not exist');
+    }
 
     const purchaseService = new PurchaseService();
     if (request.file) {
       data.nf_url = (await uploadImage(data, 'nf_url', request)) || '';
-      await removeImage(Number(id), purchaseService, 'nf_url');
+      await removeImage(Number(id), purchaseFound, 'nf_url');
     }
 
     await purchaseService.updateById(+id, data);
