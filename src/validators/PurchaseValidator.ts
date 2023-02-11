@@ -40,6 +40,15 @@ class PurchaseValidator {
       id: yup.number().required('Id is required in params'),
     });
   }
+
+  readSumPurchasesByPeriod() {
+    return yup.object().shape({
+      startDate: yup.string().required('StartDate is required'),
+      endDate: yup.string().required('EndDate is required'),
+      its_ice_cream_shoop: yup.bool().optional(),
+      provider_id: yup.number().optional(),
+    });
+  }
 }
 
 export { PurchaseValidator };

@@ -75,6 +75,14 @@ class SaleValidator {
         .required('Limit is required in query params'),
     });
   }
+
+  readSumSalesByPeriod() {
+    return yup.object().shape({
+      startDate: yup.string().required('StartDate is required'),
+      endDate: yup.string().required('EndDate is required'),
+      type_sale: yup.mixed<EnumTypeSale>().oneOf(Object.values(EnumTypeSale)).optional(),
+    });
+  }
 }
 
 export { SaleValidator };

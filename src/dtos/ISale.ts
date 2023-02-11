@@ -12,3 +12,9 @@ export interface ISale {
   client_id?: number;
   data_product?: IProduct;
 }
+
+export interface IReadSumSales {
+  startDate: string;
+  endDate: string;
+  type_sale?: EnumTypeSale;
+}

@@ -72,6 +72,12 @@ router.post(
   purchaseController.create,
 );
 router.get('/purchase', ensureAuthenticated, purchaseController.read);
+router.get(
+  '/purchase/period',
+  ensureAuthenticated,
+  ensureSuper,
+  purchaseController.readSumPurchasesByPeriod,
+);
 router.get('/purchase/:id', ensureAuthenticated, purchaseController.readById);
 router.delete('/purchase/:id', ensureAuthenticated, ensureSuper, purchaseController.deleteById);
 router.put(
@@ -86,6 +92,7 @@ router.put(
 router.post('/sales', ensureAuthenticated, ensureSuper, saleController.create);
 router.get('/sales', ensureAuthenticated, saleController.read);
 router.get('/sales/paged', ensureAuthenticated, saleController.readSalesPaged);
+router.get('/sales/period', ensureAuthenticated, ensureSuper, saleController.readSumSalesByPeriod);
 router.get('/sales/:id', ensureAuthenticated, saleController.readById);
 router.delete('/sales/:id', ensureAuthenticated, ensureSuper, saleController.deleteById);
 router.put('/sales/:id', ensureAuthenticated, ensureSuper, saleController.updateById);

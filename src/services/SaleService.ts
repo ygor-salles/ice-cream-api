@@ -1,5 +1,5 @@
 import { getCustomRepository, Repository } from 'typeorm';
-import { ISale } from '../dtos/ISale';
+import { IReadSumSales, ISale } from '../dtos/ISale';
 import { Sale } from '../entities/Sale';
 import { SaleRepository } from '../repositories/SaleRepository';
 
@@ -60,6 +60,23 @@ class SaleService {
 
   async updateById(id: number, data: ISale) {
     await this.repositorySale.update(id, data);
+  }
+
+  async readSumSalesByPeriod({ startDate, endDate, type_sale }: IReadSumSales) {
+    const sumSales = type_sale
+      ? this.repositorySale
+          .createQueryBuilder('sales')
+          .select('SUM(sales.total)', 'total_sales')
+          .where('sales.created_at BETWEEN :startDate AND :endDate', { startDate, endDate })
+          .andWhere('sales.type_sale = :type_sale', { type_sale })
+          .getRawOne()
+      : this.repositorySale
+          .createQueryBuilder('sales')
+          .select('SUM(sales.total)', 'total_sales')
+          .where('sales.created_at BETWEEN :startDate AND :endDate', { startDate, endDate })
+          .getRawOne();
+
+    return sumSales;
   }
 }
 

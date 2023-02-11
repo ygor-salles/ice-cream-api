@@ -6,6 +6,7 @@ import { PurchaseValidator } from '../validators/PurchaseValidator';
 import { ApiError } from '../validators/Exceptions/ApiError';
 import { removeImage, uploadImage } from './UploadController';
 import { formaterDataPurchase } from '../utils';
+import { IReadSumPurchases } from '../dtos/IProvider';
 
 class PurchaseController {
   async create(request: Request, response: Response) {
@@ -100,6 +101,21 @@ class PurchaseController {
 
     await purchaseService.updateById(+id, data);
     response.status(200).json({ message: 'Purchase updated successfully' });
+  }
+
+  async readSumPurchasesByPeriod(request: Request, response: Response) {
+    const data: IReadSumPurchases = request.body;
+
+    const purchaseValidator = new PurchaseValidator();
+    try {
+      await purchaseValidator.readSumPurchasesByPeriod().validate(data, { abortEarly: false });
+    } catch (error) {
+      throw new ApiError(400, error?.errors?.join(', ') || error);
+    }
+
+    const purchaseService = new PurchaseService();
+    const sumPurchases = await purchaseService.readSumPurchasesByPeriod(data);
+    response.status(200).json({ ...sumPurchases });
   }
 }
 
