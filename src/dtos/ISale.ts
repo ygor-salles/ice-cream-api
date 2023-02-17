@@ -18,3 +18,7 @@ export interface IReadSumSales {
   endDate: string;
   type_sale?: EnumTypeSale;
 }
+
+export interface IReadSumSalesToday {
+  type_sale?: EnumTypeSale;
+}

@@ -1,6 +1,6 @@
 import { getCustomRepository, Repository } from 'typeorm';
-import { IReadSumSales, ISale } from '../dtos/ISale';
-import { Sale } from '../entities/Sale';
+import { IReadSumSales, IReadSumSalesToday, ISale } from '../dtos/ISale';
+import { EnumTypeSale, Sale } from '../entities/Sale';
 import { SaleRepository } from '../repositories/SaleRepository';
 
 class SaleService {
@@ -63,17 +63,60 @@ class SaleService {
   }
 
   async readSumSalesByPeriod({ startDate, endDate, type_sale }: IReadSumSales) {
+    let sumSales: any;
+
+    if (startDate === endDate) {
+      sumSales = await this.readSumOneDaySales(startDate, type_sale);
+    } else {
+      sumSales = type_sale
+        ? await this.repositorySale
+            .createQueryBuilder('sales')
+            .select('SUM(sales.total)', 'total_sales')
+            .where('sales.created_at BETWEEN :startDate AND :endDate', { startDate, endDate })
+            .andWhere('sales.type_sale = :type_sale', { type_sale })
+            .getRawOne()
+        : await this.repositorySale
+            .createQueryBuilder('sales')
+            .select('SUM(sales.total)', 'total_sales')
+            .where('sales.created_at BETWEEN :startDate AND :endDate', { startDate, endDate })
+            .getRawOne();
+    }
+
+    return sumSales;
+  }
+
+  async readSumOfTodaySales({ type_sale }: IReadSumSalesToday) {
+    let today: Date | string = new Date();
+    today = today.toISOString().substring(0, 10);
+
     const sumSales = type_sale
-      ? this.repositorySale
+      ? await this.repositorySale
           .createQueryBuilder('sales')
           .select('SUM(sales.total)', 'total_sales')
-          .where('sales.created_at BETWEEN :startDate AND :endDate', { startDate, endDate })
+          .where("date_trunc('day', sales.created_at) = :today", { today })
           .andWhere('sales.type_sale = :type_sale', { type_sale })
           .getRawOne()
-      : this.repositorySale
+      : await this.repositorySale
           .createQueryBuilder('sales')
           .select('SUM(sales.total)', 'total_sales')
-          .where('sales.created_at BETWEEN :startDate AND :endDate', { startDate, endDate })
+          .where("date_trunc('day', sales.created_at) = :today", { today })
+          .getRawOne();
+
+    return sumSales;
+  }
+
+  async readSumOneDaySales(singleDate: string, type_sale: EnumTypeSale) {
+    const sumSales = type_sale
+      ? await this.repositorySale
+          .createQueryBuilder('sales')
+          .select('SUM(sales.total)', 'total_sales')
+          .where("date_trunc('day', sales.created_at) = :singleDate", { singleDate })
+          .andWhere('sales.type_sale = :type_sale', { type_sale })
+          .getRawOne()
+      : await this.repositorySale
+          .createQueryBuilder('sales')
+          .select('SUM(sales.total)', 'total_sales')
+          .where("date_trunc('day', sales.created_at) = :singleDate", { singleDate })
           .getRawOne();
 
     return sumSales;

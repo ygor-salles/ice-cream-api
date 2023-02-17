@@ -117,6 +117,12 @@ class PurchaseController {
     const sumPurchases = await purchaseService.readSumPurchasesByPeriod(data);
     response.status(200).json({ ...sumPurchases });
   }
+
+  async readSumPurchasesToday(request: Request, response: Response) {
+    const purchaseService = new PurchaseService();
+    const sumPurchases = await purchaseService.readSumPurchasesToday();
+    response.status(200).json({ ...sumPurchases });
+  }
 }
 
 export { PurchaseController };

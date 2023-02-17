@@ -83,6 +83,12 @@ class SaleValidator {
       type_sale: yup.mixed<EnumTypeSale>().oneOf(Object.values(EnumTypeSale)).optional(),
     });
   }
+
+  readSumOfTodaySales() {
+    return yup.object().shape({
+      type_sale: yup.mixed<EnumTypeSale>().oneOf(Object.values(EnumTypeSale)).optional(),
+    });
+  }
 }
 
 export { SaleValidator };
