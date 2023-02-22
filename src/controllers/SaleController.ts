@@ -1,6 +1,6 @@
 /* eslint-disable radix */
 import { Request, Response } from 'express';
-import { IReadSumSales, IReadSumSalesToday, ISale } from '../dtos/ISale';
+import { IPostCashClosing, IReadSumSales, IReadSumSalesToday, ISale } from '../dtos/ISale';
 import { SaleService } from '../services/SaleService';
 import { ApiError } from '../validators/Exceptions/ApiError';
 import { SaleValidator } from '../validators/SaleValidator';
@@ -121,6 +121,21 @@ class SaleController {
     const saleService = new SaleService();
     const sumSales = await saleService.readSumOfTodaySales(data);
     response.status(200).json({ ...sumSales });
+  }
+
+  async dailyCashClosing(request: Request, response: Response) {
+    const data: IPostCashClosing = request.body;
+
+    const saleValidator = new SaleValidator();
+    try {
+      await saleValidator.cashClosing().validate(data, { abortEarly: false });
+    } catch (error) {
+      throw new ApiError(400, error?.errors?.join(', ') || error);
+    }
+
+    const saleService = new SaleService();
+    const sale = await saleService.dailyCashClosing(data);
+    response.status(200).json(sale);
   }
 }
 

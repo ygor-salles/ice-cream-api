@@ -22,3 +22,8 @@ export interface IReadSumSales {
 export interface IReadSumSalesToday {
   type_sale?: EnumTypeSale;
 }
+
+export interface IPostCashClosing {
+  total: number;
+  created_at?: Date | string;
+}

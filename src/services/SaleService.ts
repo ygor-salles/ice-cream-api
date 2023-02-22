@@ -1,5 +1,5 @@
 import { getCustomRepository, Repository } from 'typeorm';
-import { IReadSumSales, IReadSumSalesToday, ISale } from '../dtos/ISale';
+import { IPostCashClosing, IReadSumSales, IReadSumSalesToday, ISale } from '../dtos/ISale';
 import { EnumTypeSale, Sale } from '../entities/Sale';
 import { SaleRepository } from '../repositories/SaleRepository';
 
@@ -126,6 +126,16 @@ class SaleService {
           .getRawOne();
 
     return sumSales;
+  }
+
+  async dailyCashClosing(data: IPostCashClosing) {
+    const object = data?.created_at
+      ? { ...data, updated_at: data.created_at, type_sale: EnumTypeSale.CASH_CLOSING }
+      : { ...data, type_sale: EnumTypeSale.CASH_CLOSING };
+
+    const sale = this.repositorySale.create(object);
+    await this.repositorySale.save(sale);
+    return sale;
   }
 }
 

@@ -18,6 +18,7 @@ export enum EnumTypeSale {
   CARD = 'CARTAO',
   MONEY = 'DINHEIRO',
   DEBIT = 'FIADO',
+  CASH_CLOSING = 'FECHAMENTO DE CAIXA',
 }
 
 @Entity('sales')

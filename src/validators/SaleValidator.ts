@@ -89,6 +89,13 @@ class SaleValidator {
       type_sale: yup.mixed<EnumTypeSale>().oneOf(Object.values(EnumTypeSale)).optional(),
     });
   }
+
+  cashClosing() {
+    return yup.object().shape({
+      total: yup.number().required('Total is required'),
+      created_at: yup.date().optional(),
+    });
+  }
 }
 
 export { SaleValidator };

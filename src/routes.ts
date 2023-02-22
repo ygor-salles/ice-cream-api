@@ -103,6 +103,12 @@ router.get('/sales/today', ensureAuthenticated, ensureSuper, saleController.read
 router.get('/sales/:id', ensureAuthenticated, saleController.readById);
 router.delete('/sales/:id', ensureAuthenticated, ensureSuper, saleController.deleteById);
 router.put('/sales/:id', ensureAuthenticated, ensureSuper, saleController.updateById);
+router.post(
+  '/sales/cash-closing',
+  ensureAuthenticated,
+  ensureSuper,
+  saleController.dailyCashClosing,
+);
 
 // *************************************** COMBINATIONS ROUTES ********************************************** //
 router.post('/combinations', ensureAuthenticated, ensureSuper, combinationController.create);
