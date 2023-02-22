@@ -71,14 +71,20 @@ class SaleService {
       sumSales = type_sale
         ? await this.repositorySale
             .createQueryBuilder('sales')
-            .select('SUM(sales.total)', 'total_sales')
-            .where('sales.created_at BETWEEN :startDate AND :endDate', { startDate, endDate })
-            .andWhere('sales.type_sale = :type_sale', { type_sale })
+            .select('SUM(total)', 'total_sales')
+            .where('created_at BETWEEN :startDate AND :endDate', {
+              startDate,
+              endDate: `${endDate} 23:59:59`,
+            })
+            .andWhere('type_sale = :type_sale', { type_sale })
             .getRawOne()
         : await this.repositorySale
             .createQueryBuilder('sales')
-            .select('SUM(sales.total)', 'total_sales')
-            .where('sales.created_at BETWEEN :startDate AND :endDate', { startDate, endDate })
+            .select('SUM(total)', 'total_sales')
+            .where('created_at BETWEEN :startDate AND :endDate', {
+              startDate,
+              endDate: `${endDate} 23:59:59`,
+            })
             .getRawOne();
     }
 
@@ -92,14 +98,14 @@ class SaleService {
     const sumSales = type_sale
       ? await this.repositorySale
           .createQueryBuilder('sales')
-          .select('SUM(sales.total)', 'total_sales')
-          .where("date_trunc('day', sales.created_at) = :today", { today })
-          .andWhere('sales.type_sale = :type_sale', { type_sale })
+          .select('SUM(total)', 'total_sales')
+          .where("date_trunc('day', created_at) = :today", { today })
+          .andWhere('type_sale = :type_sale', { type_sale })
           .getRawOne()
       : await this.repositorySale
           .createQueryBuilder('sales')
-          .select('SUM(sales.total)', 'total_sales')
-          .where("date_trunc('day', sales.created_at) = :today", { today })
+          .select('SUM(total)', 'total_sales')
+          .where("date_trunc('day', created_at) = :today", { today })
           .getRawOne();
 
     return sumSales;
@@ -109,14 +115,14 @@ class SaleService {
     const sumSales = type_sale
       ? await this.repositorySale
           .createQueryBuilder('sales')
-          .select('SUM(sales.total)', 'total_sales')
-          .where("date_trunc('day', sales.created_at) = :singleDate", { singleDate })
-          .andWhere('sales.type_sale = :type_sale', { type_sale })
+          .select('SUM(total)', 'total_sales')
+          .where("date_trunc('day', created_at) = :singleDate", { singleDate })
+          .andWhere('type_sale = :type_sale', { type_sale })
           .getRawOne()
       : await this.repositorySale
           .createQueryBuilder('sales')
-          .select('SUM(sales.total)', 'total_sales')
-          .where("date_trunc('day', sales.created_at) = :singleDate", { singleDate })
+          .select('SUM(total)', 'total_sales')
+          .where("date_trunc('day', created_at) = :singleDate", { singleDate })
           .getRawOne();
 
     return sumSales;

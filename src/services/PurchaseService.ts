@@ -51,30 +51,42 @@ class PurchaseService {
     } else if (its_ice_cream_shoop !== undefined && provider_id) {
       sumPurchases = this.repositoryPurchase
         .createQueryBuilder('purchases')
-        .select('SUM(purchases.value_total)', 'total_purchases')
-        .where('purchases.created_at BETWEEN :startDate AND :endDate', { startDate, endDate })
-        .andWhere('purchases.its_ice_cream_shoop = :its_ice_cream_shoop', { its_ice_cream_shoop })
-        .andWhere('purchases.provider_id = :provider_id', { provider_id })
+        .select('SUM(value_total)', 'total_purchases')
+        .where('created_at BETWEEN :startDate AND :endDate', {
+          startDate,
+          endDate: `${endDate} 23:59:59`,
+        })
+        .andWhere('its_ice_cream_shoop = :its_ice_cream_shoop', { its_ice_cream_shoop })
+        .andWhere('provider_id = :provider_id', { provider_id })
         .getRawOne();
     } else if (its_ice_cream_shoop !== undefined) {
       sumPurchases = this.repositoryPurchase
         .createQueryBuilder('purchases')
-        .select('SUM(purchases.value_total)', 'total_purchases')
-        .where('purchases.created_at BETWEEN :startDate AND :endDate', { startDate, endDate })
-        .andWhere('purchases.its_ice_cream_shoop = :its_ice_cream_shoop', { its_ice_cream_shoop })
+        .select('SUM(value_total)', 'total_purchases')
+        .where('created_at BETWEEN :startDate AND :endDate', {
+          startDate,
+          endDate: `${endDate} 23:59:59`,
+        })
+        .andWhere('its_ice_cream_shoop = :its_ice_cream_shoop', { its_ice_cream_shoop })
         .getRawOne();
     } else if (provider_id) {
       sumPurchases = this.repositoryPurchase
         .createQueryBuilder('purchases')
-        .select('SUM(purchases.value_total)', 'total_purchases')
-        .where('purchases.created_at BETWEEN :startDate AND :endDate', { startDate, endDate })
-        .andWhere('purchases.provider_id = :provider_id', { provider_id })
+        .select('SUM(value_total)', 'total_purchases')
+        .where('created_at BETWEEN :startDate AND :endDate', {
+          startDate,
+          endDate: `${endDate} 23:59:59`,
+        })
+        .andWhere('provider_id = :provider_id', { provider_id })
         .getRawOne();
     } else {
       sumPurchases = this.repositoryPurchase
         .createQueryBuilder('purchases')
-        .select('SUM(purchases.value_total)', 'total_purchases')
-        .where('purchases.created_at BETWEEN :startDate AND :endDate', { startDate, endDate })
+        .select('SUM(value_total)', 'total_purchases')
+        .where('created_at BETWEEN :startDate AND :endDate', {
+          startDate,
+          endDate: `${endDate} 23:59:59`,
+        })
         .getRawOne();
     }
 
@@ -87,8 +99,8 @@ class PurchaseService {
 
     const sumPurchases = await this.repositoryPurchase
       .createQueryBuilder('purchases')
-      .select('SUM(purchases.value_total)', 'total_purchases')
-      .where("DATE_TRUNC('day', purchases.created_at) = :today", { today })
+      .select('SUM(value_total)', 'total_purchases')
+      .where("DATE_TRUNC('day', created_at) = :today", { today })
       .getRawOne();
 
     return sumPurchases;
@@ -99,42 +111,35 @@ class PurchaseService {
     its_ice_cream_shoop: boolean,
     provider_id: number,
   ) {
-    console.log(singleDate);
-    console.log(its_ice_cream_shoop);
-    console.log(provider_id);
     let sumPurchases: any;
 
     if (its_ice_cream_shoop !== undefined && provider_id) {
-      console.log(1);
       sumPurchases = await this.repositoryPurchase
         .createQueryBuilder('purchases')
-        .select('SUM(purchases.value_total)', 'total_purchases')
-        .where("DATE_TRUNC('day', purchases.created_at) = :singleDate", { singleDate })
-        .andWhere('purchases.its_ice_cream_shoop = :its_ice_cream_shoop', { its_ice_cream_shoop })
-        .andWhere('purchases.provider_id = :provider_id', { provider_id })
+        .select('SUM(value_total)', 'total_purchases')
+        .where("DATE_TRUNC('day', created_at) = :singleDate", { singleDate })
+        .andWhere('its_ice_cream_shoop = :its_ice_cream_shoop', { its_ice_cream_shoop })
+        .andWhere('provider_id = :provider_id', { provider_id })
         .getRawOne();
     } else if (its_ice_cream_shoop !== undefined) {
-      console.log(2);
       sumPurchases = await this.repositoryPurchase
         .createQueryBuilder('purchases')
-        .select('SUM(purchases.value_total)', 'total_purchases')
-        .where("DATE_TRUNC('day', purchases.created_at) = :singleDate", { singleDate })
-        .andWhere('purchases.its_ice_cream_shoop = :its_ice_cream_shoop', { its_ice_cream_shoop })
+        .select('SUM(value_total)', 'total_purchases')
+        .where("DATE_TRUNC('day', created_at) = :singleDate", { singleDate })
+        .andWhere('its_ice_cream_shoop = :its_ice_cream_shoop', { its_ice_cream_shoop })
         .getRawOne();
     } else if (provider_id) {
-      console.log(3);
       sumPurchases = await this.repositoryPurchase
         .createQueryBuilder('purchases')
-        .select('SUM(purchases.value_total)', 'total_purchases')
-        .where("DATE_TRUNC('day', purchases.created_at) = :singleDate", { singleDate })
-        .andWhere('purchases.provider_id = :provider_id', { provider_id })
+        .select('SUM(value_total)', 'total_purchases')
+        .where("DATE_TRUNC('day', created_at) = :singleDate", { singleDate })
+        .andWhere('provider_id = :provider_id', { provider_id })
         .getRawOne();
     } else {
-      console.log(4);
       sumPurchases = await this.repositoryPurchase
         .createQueryBuilder('purchases')
-        .select('SUM(purchases.value_total)', 'total_purchases')
-        .where("DATE_TRUNC('day', purchases.created_at) = :singleDate", { singleDate })
+        .select('SUM(value_total)', 'total_purchases')
+        .where("DATE_TRUNC('day', created_at) = :singleDate", { singleDate })
         .getRawOne();
     }
 
