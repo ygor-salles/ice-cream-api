@@ -6,6 +6,7 @@ export interface ISale {
   total: number;
   type_sale: EnumTypeSale;
   observation?: string;
+  in_progress?: boolean;
   amount: number;
   created_at?: Date;
   updated_at?: Date;

@@ -1,6 +1,7 @@
 import {
   AfterInsert,
   AfterRemove,
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -12,6 +13,7 @@ import {
 import { IProduct } from '../dtos/IProduct';
 import { HookSale } from '../hooks/HookSale';
 import { Client } from './Client';
+import { EnumTypeProduct } from './Product';
 
 export enum EnumTypeSale {
   PIX = 'PIX',
@@ -48,11 +50,21 @@ class Sale {
   data_product: IProduct;
 
   @Column()
+  in_progress: boolean;
+
+  @Column()
   client_id: number;
 
   @ManyToOne(() => Client)
   @JoinColumn({ name: 'client_id' })
   client: Client;
+
+  @BeforeInsert()
+  async beforeInsert() {
+    if (this.data_product.type === EnumTypeProduct.ACAI) {
+      this.in_progress = true;
+    }
+  }
 
   @AfterInsert()
   async afterInsert(): Promise<void> {

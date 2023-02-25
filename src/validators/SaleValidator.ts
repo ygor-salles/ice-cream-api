@@ -20,6 +20,7 @@ class SaleValidator {
       observation: yup.string().optional(),
       amount: yup.number().required('Amount is required'),
       client_id: yup.number().optional(),
+      in_progress: yup.bool().optional(),
       data_product: yup
         .object()
         .shape({
@@ -39,6 +40,7 @@ class SaleValidator {
       observation: yup.string().optional(),
       amount: yup.number().optional(),
       client_id: yup.number().optional(),
+      in_progress: yup.bool().optional(),
       data_product: yup
         .object()
         .shape({

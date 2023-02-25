@@ -100,6 +100,12 @@ router.get('/sales', ensureAuthenticated, saleController.read);
 router.get('/sales/paged', ensureAuthenticated, saleController.readSalesPaged);
 router.post('/sales/period', ensureAuthenticated, ensureSuper, saleController.readSumSalesByPeriod);
 router.get('/sales/today', ensureAuthenticated, ensureSuper, saleController.readSumOfTodaySales);
+router.get(
+  '/sales/activated-acai',
+  ensureAuthenticated,
+  ensureSuper,
+  saleController.readSalesActivatedAcai,
+);
 router.get('/sales/:id', ensureAuthenticated, saleController.readById);
 router.delete('/sales/:id', ensureAuthenticated, ensureSuper, saleController.deleteById);
 router.put('/sales/:id', ensureAuthenticated, ensureSuper, saleController.updateById);

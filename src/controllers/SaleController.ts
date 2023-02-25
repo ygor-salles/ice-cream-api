@@ -137,6 +137,12 @@ class SaleController {
     const sale = await saleService.dailyCashClosing(data);
     response.status(200).json(sale);
   }
+
+  async readSalesActivatedAcai(request: Request, response: Response) {
+    const saleService = new SaleService();
+    const allSales = await saleService.readSalesActivatedAcai();
+    response.status(200).json(allSales);
+  }
 }
 
 export { SaleController };

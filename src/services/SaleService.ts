@@ -137,6 +137,15 @@ class SaleService {
     await this.repositorySale.save(sale);
     return sale;
   }
+
+  async readSalesActivatedAcai() {
+    const allSales = await this.repositorySale.find({
+      relations: ['client'],
+      where: { in_progress: true },
+      order: { created_at: 'ASC' },
+    });
+    return allSales;
+  }
 }
 
 export { SaleService };
