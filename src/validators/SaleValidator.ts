@@ -43,10 +43,11 @@ class SaleValidator {
       in_progress: yup.bool().optional(),
       data_product: yup
         .object()
+        .notRequired()
         .shape({
-          id: yup.number().required('Id data_product is required'),
-          name: yup.string().required('Name data_product is required'),
-          price: yup.number().required('Price data_product is required'),
+          id: yup.number().optional(),
+          name: yup.string().optional(),
+          price: yup.number().optional(),
         })
         .optional(),
     });
