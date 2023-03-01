@@ -25,7 +25,9 @@ class SaleService {
   }
 
   async readById(id: number) {
-    const sale = await this.repositorySale.findOne(id, { relations: ['client'] });
+    const sale = await this.repositorySale.findOne(id, {
+      relations: ['client'],
+    });
     return sale;
   }
 
@@ -130,7 +132,11 @@ class SaleService {
 
   async dailyCashClosing(data: IPostCashClosing) {
     const object = data?.created_at
-      ? { ...data, updated_at: data.created_at, type_sale: EnumTypeSale.CASH_CLOSING }
+      ? {
+          ...data,
+          updated_at: data.created_at,
+          type_sale: EnumTypeSale.CASH_CLOSING,
+        }
       : { ...data, type_sale: EnumTypeSale.CASH_CLOSING };
 
     const sale = this.repositorySale.create(object);

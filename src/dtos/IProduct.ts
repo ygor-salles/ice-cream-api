@@ -12,3 +12,10 @@ export interface IProduct {
   updated_at?: Date;
   combinations?: Array<Combination>;
 }
+
+export interface IDataProduct {
+  name: string;
+  price: number;
+  type?: EnumTypeProduct;
+  combinations?: Array<{ name: string; price: number }>;
+}

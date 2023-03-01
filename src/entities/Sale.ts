@@ -10,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { IProduct } from '../dtos/IProduct';
+import { IDataProduct } from '../dtos/IProduct';
 import { HookSale } from '../hooks/HookSale';
 import { Client } from './Client';
 import { EnumTypeProduct } from './Product';
@@ -47,7 +47,7 @@ class Sale {
   updated_at: Date;
 
   @Column({ type: 'simple-json' })
-  data_product: IProduct;
+  data_product: IDataProduct;
 
   @Column()
   in_progress: boolean;
@@ -64,6 +64,17 @@ class Sale {
     if (this.data_product.type === EnumTypeProduct.ACAI) {
       this.in_progress = true;
     }
+    const combinations = this.data_product?.combinations;
+    this.data_product = combinations.length
+      ? {
+          name: this.data_product.name,
+          price: this.data_product.price,
+          combinations: combinations.map(item => ({ name: item.name, price: item.price })),
+        }
+      : {
+          name: this.data_product.name,
+          price: this.data_product.price,
+        };
   }
 
   @AfterInsert()
