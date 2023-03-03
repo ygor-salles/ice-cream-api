@@ -1,3 +1,4 @@
+import moment from 'moment-timezone';
 import { IPurchase, IPurchaseMultipart } from '../dtos/IPurchase';
 
 export const formaterDataPurchase = (dataMultipart: IPurchaseMultipart): IPurchase => {
@@ -8,4 +9,10 @@ export const formaterDataPurchase = (dataMultipart: IPurchaseMultipart): IPurcha
     provider_id: Number(dataMultipart.provider_id),
   };
   return data;
+};
+
+export const getLocalTodayDate = () => {
+  const today = moment(new Date());
+  const todayLocal = today.tz('America/Sao_Paulo');
+  return todayLocal.format('YYYY-MM-DD');
 };

@@ -2,6 +2,7 @@ import { getCustomRepository, Repository } from 'typeorm';
 import { IPostCashClosing, IReadSumSales, IReadSumSalesToday, ISale } from '../dtos/ISale';
 import { EnumTypeSale, Sale } from '../entities/Sale';
 import { SaleRepository } from '../repositories/SaleRepository';
+import { getLocalTodayDate } from '../utils';
 
 class SaleService {
   private repositorySale: Repository<Sale>;
@@ -94,8 +95,7 @@ class SaleService {
   }
 
   async readSumOfTodaySales({ type_sale }: IReadSumSalesToday) {
-    let today: Date | string = new Date();
-    today = today.toISOString().substring(0, 10);
+    const today = getLocalTodayDate();
 
     const sumSales = type_sale
       ? await this.repositorySale

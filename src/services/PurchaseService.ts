@@ -3,6 +3,7 @@ import { IReadSumPurchases } from '../dtos/IProvider';
 import { IPurchase } from '../dtos/IPurchase';
 import { Purchase } from '../entities/Purchase';
 import { PurchaseRepository } from '../repositories/PurchaseRepository';
+import { getLocalTodayDate } from '../utils';
 
 class PurchaseService {
   private repositoryPurchase: Repository<Purchase>;
@@ -94,8 +95,7 @@ class PurchaseService {
   }
 
   async readSumPurchasesToday() {
-    let today: Date | string = new Date();
-    today = today.toISOString().substring(0, 10);
+    const today = getLocalTodayDate();
 
     const sumPurchases = await this.repositoryPurchase
       .createQueryBuilder('purchases')
