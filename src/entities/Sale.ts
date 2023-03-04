@@ -35,10 +35,10 @@ class Sale {
   type_sale: EnumTypeSale;
 
   @Column()
-  observation: string;
+  observation?: string;
 
   @Column()
-  amount: number;
+  amount?: number;
 
   @CreateDateColumn()
   created_at: Date;
@@ -47,13 +47,13 @@ class Sale {
   updated_at: Date;
 
   @Column({ type: 'simple-json' })
-  data_product: IDataProduct;
+  data_product?: IDataProduct;
 
   @Column()
   in_progress: boolean;
 
   @Column()
-  client_id: number;
+  client_id?: number;
 
   @ManyToOne(() => Client)
   @JoinColumn({ name: 'client_id' })
@@ -61,20 +61,22 @@ class Sale {
 
   @BeforeInsert()
   async beforeInsert() {
-    if (this.data_product.type === EnumTypeProduct.ACAI) {
-      this.in_progress = true;
+    if (this.data_product) {
+      if (this.data_product.type === EnumTypeProduct.ACAI) {
+        this.in_progress = true;
+      }
+      const combinations = this.data_product?.combinations;
+      this.data_product = combinations.length
+        ? {
+            name: this.data_product.name,
+            price: this.data_product.price,
+            combinations: combinations.map(item => ({ name: item.name, price: item.price })),
+          }
+        : {
+            name: this.data_product.name,
+            price: this.data_product.price,
+          };
     }
-    const combinations = this.data_product?.combinations;
-    this.data_product = combinations.length
-      ? {
-          name: this.data_product.name,
-          price: this.data_product.price,
-          combinations: combinations.map(item => ({ name: item.name, price: item.price })),
-        }
-      : {
-          name: this.data_product.name,
-          price: this.data_product.price,
-        };
   }
 
   @AfterInsert()

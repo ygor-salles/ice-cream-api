@@ -26,5 +26,5 @@ export interface IReadSumSalesToday {
 
 export interface IPostCashClosing {
   total: number;
-  created_at?: Date | string;
+  created_at?: Date;
 }
