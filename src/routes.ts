@@ -11,6 +11,7 @@ import { PurchaseController } from './controllers/PurchaseController';
 import { SaleController } from './controllers/SaleController';
 import { CombinationController } from './controllers/CombinationController';
 import { UPLOAD_IMAGE } from './middlewares/uploadFile';
+import { ensureEmployee } from './middlewares/ensureEmployee';
 
 const router = Router();
 
@@ -32,13 +33,13 @@ router.post('/signin', authController.handle);
 // *************************************** USER ROUTES ********************************************** //
 router.post('/users', ensureAuthenticated, ensureSuper, userController.create);
 // router.post('/users', userController.create);
-router.get('/users', ensureAuthenticated, userController.read);
+router.get('/users', ensureAuthenticated, ensureSuper, userController.read);
 router.get('/users/:id', userController.readById);
 router.delete('/users/:id', ensureAuthenticated, ensureSuper, userController.deleteById);
 router.put('/users/:id', ensureAuthenticated, ensureSuper, userController.updateById);
 
 // *************************************** CLIENT ROUTES ********************************************** //
-router.post('/clients', ensureAuthenticated, ensureSuper, clientController.create);
+router.post('/clients', ensureAuthenticated, ensureSuper, ensureEmployee, clientController.create);
 router.get('/clients', ensureAuthenticated, clientController.read);
 router.get('/clients/:id', ensureAuthenticated, clientController.readById);
 router.put('/clients/:id', ensureAuthenticated, ensureSuper, clientController.updateById);
@@ -51,11 +52,17 @@ router.delete('/providers/:id', ensureAuthenticated, ensureSuper, providerContro
 router.put('/providers/:id', ensureAuthenticated, ensureSuper, providerController.updateById);
 
 // *************************************** PRODUCT ROUTES ********************************************** //
-router.post('/products', ensureAuthenticated, ensureSuper, productController.create);
+router.post(
+  '/products',
+  ensureAuthenticated,
+  ensureSuper,
+  ensureEmployee,
+  productController.create,
+);
 router.get('/products', ensureAuthenticated, productController.read);
 router.get('/products/:id', ensureAuthenticated, productController.readById);
 router.delete('/products/:id', ensureAuthenticated, ensureSuper, productController.deleteById);
-router.put('/products/:id', ensureAuthenticated, ensureSuper, productController.updateById);
+router.put('/products/:id', ensureAuthenticated, productController.updateById);
 
 // *************************************** PAYMENT ROUTES ********************************************** //
 router.post('/payments', ensureAuthenticated, ensureSuper, paymentController.create);
@@ -78,12 +85,7 @@ router.post(
   ensureSuper,
   purchaseController.readSumPurchasesByPeriod,
 );
-router.get(
-  '/purchase/today',
-  ensureAuthenticated,
-  ensureSuper,
-  purchaseController.readSumPurchasesToday,
-);
+router.get('/purchase/today', ensureAuthenticated, purchaseController.readSumPurchasesToday);
 router.get('/purchase/:id', ensureAuthenticated, purchaseController.readById);
 router.delete('/purchase/:id', ensureAuthenticated, ensureSuper, purchaseController.deleteById);
 router.put(
@@ -95,29 +97,31 @@ router.put(
 );
 
 // *************************************** SALES ROUTES ********************************************** //
-router.post('/sales', ensureAuthenticated, ensureSuper, saleController.create);
+router.post('/sales', ensureAuthenticated, saleController.create);
 router.get('/sales', ensureAuthenticated, saleController.read);
 router.get('/sales/paged', ensureAuthenticated, saleController.readSalesPaged);
 router.post('/sales/period', ensureAuthenticated, ensureSuper, saleController.readSumSalesByPeriod);
-router.get('/sales/today', ensureAuthenticated, ensureSuper, saleController.readSumOfTodaySales);
-router.get(
-  '/sales/activated-acai',
-  ensureAuthenticated,
-  ensureSuper,
-  saleController.readSalesActivatedAcai,
-);
+router.get('/sales/today', ensureAuthenticated, saleController.readSumOfTodaySales);
+router.get('/sales/activated-acai', ensureAuthenticated, saleController.readSalesActivatedAcai);
 router.get('/sales/:id', ensureAuthenticated, saleController.readById);
-router.delete('/sales/:id', ensureAuthenticated, ensureSuper, saleController.deleteById);
-router.put('/sales/:id', ensureAuthenticated, ensureSuper, saleController.updateById);
+router.delete('/sales/:id', ensureAuthenticated, saleController.deleteById);
+router.put('/sales/:id', ensureAuthenticated, saleController.updateById);
 router.post(
   '/sales/cash-closing',
   ensureAuthenticated,
   ensureSuper,
+  ensureEmployee,
   saleController.dailyCashClosing,
 );
 
 // *************************************** COMBINATIONS ROUTES ********************************************** //
-router.post('/combinations', ensureAuthenticated, ensureSuper, combinationController.create);
+router.post(
+  '/combinations',
+  ensureAuthenticated,
+  ensureSuper,
+  ensureEmployee,
+  combinationController.create,
+);
 router.get('/combinations', ensureAuthenticated, combinationController.read);
 router.get('/combinations/:id', ensureAuthenticated, combinationController.readById);
 router.delete(
