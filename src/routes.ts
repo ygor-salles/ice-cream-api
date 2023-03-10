@@ -41,6 +41,7 @@ router.put('/users/:id', ensureAuthenticated, ensureSuper, userController.update
 // *************************************** CLIENT ROUTES ********************************************** //
 router.post('/clients', ensureAuthenticated, ensureEmployee, clientController.create);
 router.get('/clients', ensureAuthenticated, clientController.read);
+router.get('/clients/debits', ensureAuthenticated, clientController.readSumDebitClient);
 router.get('/clients/:id', ensureAuthenticated, clientController.readById);
 router.put('/clients/:id', ensureAuthenticated, ensureSuper, clientController.updateById);
 

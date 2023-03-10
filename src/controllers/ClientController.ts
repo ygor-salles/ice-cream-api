@@ -78,6 +78,12 @@ class ClientController {
     await clientService.updateById(+id, data);
     response.status(200).json({ message: 'Client updated successfully' });
   }
+
+  async readSumDebitClient(request: Request, response: Response) {
+    const clientService = new ClientService();
+    const sumDebits = await clientService.readSumDebitClient();
+    response.status(200).json(sumDebits);
+  }
 }
 
 export { ClientController };

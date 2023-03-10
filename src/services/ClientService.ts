@@ -33,6 +33,15 @@ class ClientService {
   async updateById(id: number, data: IClient) {
     await this.repositoryClient.update(id, data);
   }
+
+  async readSumDebitClient() {
+    const sumDebits = await this.repositoryClient
+      .createQueryBuilder('clients')
+      .select('SUM(debit)', 'total_debits')
+      .getRawOne();
+
+    return sumDebits;
+  }
 }
 
 export { ClientService };
