@@ -39,7 +39,7 @@ router.delete('/users/:id', ensureAuthenticated, ensureSuper, userController.del
 router.put('/users/:id', ensureAuthenticated, ensureSuper, userController.updateById);
 
 // *************************************** CLIENT ROUTES ********************************************** //
-router.post('/clients', ensureAuthenticated, ensureSuper, ensureEmployee, clientController.create);
+router.post('/clients', ensureAuthenticated, ensureEmployee, clientController.create);
 router.get('/clients', ensureAuthenticated, clientController.read);
 router.get('/clients/:id', ensureAuthenticated, clientController.readById);
 router.put('/clients/:id', ensureAuthenticated, ensureSuper, clientController.updateById);
@@ -52,13 +52,7 @@ router.delete('/providers/:id', ensureAuthenticated, ensureSuper, providerContro
 router.put('/providers/:id', ensureAuthenticated, ensureSuper, providerController.updateById);
 
 // *************************************** PRODUCT ROUTES ********************************************** //
-router.post(
-  '/products',
-  ensureAuthenticated,
-  ensureSuper,
-  ensureEmployee,
-  productController.create,
-);
+router.post('/products', ensureAuthenticated, ensureEmployee, productController.create);
 router.get('/products', ensureAuthenticated, productController.read);
 router.get('/products/:id', ensureAuthenticated, productController.readById);
 router.delete('/products/:id', ensureAuthenticated, ensureSuper, productController.deleteById);
@@ -109,19 +103,12 @@ router.put('/sales/:id', ensureAuthenticated, saleController.updateById);
 router.post(
   '/sales/cash-closing',
   ensureAuthenticated,
-  ensureSuper,
   ensureEmployee,
   saleController.dailyCashClosing,
 );
 
 // *************************************** COMBINATIONS ROUTES ********************************************** //
-router.post(
-  '/combinations',
-  ensureAuthenticated,
-  ensureSuper,
-  ensureEmployee,
-  combinationController.create,
-);
+router.post('/combinations', ensureAuthenticated, ensureEmployee, combinationController.create);
 router.get('/combinations', ensureAuthenticated, combinationController.read);
 router.get('/combinations/:id', ensureAuthenticated, combinationController.readById);
 router.delete(
