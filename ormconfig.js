@@ -1,34 +1,40 @@
 require("dotenv").config();
 
+const ENV_MIGRATIONS = process.env.ENV_MIGRATIONS;
+const ENV_ENTITIES = process.env.ENV_ENTITIES
+const ENV_MIGRATIONS_DIR = process.env.ENV_MIGRATIONS_DIR;
+
 let config = {}
 if (process.env.NODE_ENV === 'development') {
   config = {
     type: "postgres",
-    host: "localhost",
-    port: +process.env.BD_PORT || 5432,
+    host: process.env.HOST ?? 'localhost',
+    port: process.env.BD_PORT ?? 5432,
     username: process.env.BD_USERNAME,
     password: process.env.BD_PASSWORD,
     database: process.env.BD_DATABASE,
     synchronize: false,
-    migrations: ["src/database/migrations/*.ts"],
-    entities: ["src/entities/*.ts"],
+    migrations: [ENV_MIGRATIONS],
+    entities: [ENV_ENTITIES],
     cli: {
-      migrationsDir: "./src/database/migrations",
+      migrationsDir: ENV_MIGRATIONS_DIR,
     }
   }
-} else if (process.env.NODE_ENV === 'test') {
+}
+
+else if (process.env.NODE_ENV === 'test') {
   config = {
     type: "postgres",
-    host: "localhost",
+    host: process.env.HOST ?? 'localhost',
     port: +process.env.BD_PORT_TEST || 5432,
     username: process.env.BD_USERNAME_TEST,
     password: process.env.BD_PASSWORD_TEST,
     database: process.env.BD_DATABASE_TEST,
     synchronize: false,
-    migrations: ["src/database/migrations/*.ts"],
-    entities: ["src/entities/*.ts"],
+    migrations: [ENV_MIGRATIONS],
+    entities: [ENV_ENTITIES],
     cli: {
-      migrationsDir: "./src/database/migrations",
+      migrationsDir: ENV_MIGRATIONS_DIR,
     },
   }
 } else if (process.env.NODE_ENV === 'production') {
@@ -46,10 +52,10 @@ if (process.env.NODE_ENV === 'development') {
         rejectUnauthorized: false,
       },
     },
-    migrations: ['build/src/database/migrations/*.js'],
-    entities: ['build/src/entities/*.js'],
+    migrations: [ENV_MIGRATIONS],
+    entities: [ENV_ENTITIES],
     cli: {
-      migrationsDir: 'build/src/database/migrations',
+      migrationsDir: ENV_MIGRATIONS_DIR,
     },
   };
 } else if (process.env.NODE_ENV === 'staging') {
@@ -67,10 +73,10 @@ if (process.env.NODE_ENV === 'development') {
         rejectUnauthorized: false,
       },
     },
-    migrations: ['build/src/database/migrations/*.js'],
-    entities: ['build/src/entities/*.js'],
+    migrations: [ENV_MIGRATIONS],
+    entities: [ENV_ENTITIES],
     cli: {
-      migrationsDir: 'build/src/database/migrations',
+      migrationsDir: ENV_MIGRATIONS_DIR,
     },
   };
 } else {

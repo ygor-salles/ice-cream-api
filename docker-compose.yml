@@ -1,14 +1,26 @@
-version: "3.5"
+version: '3'
 
 services:
-  postgres:
-    container_name: app-sorveteria
-    image: postgres:12.5
+  db:
+    image: postgres:13
+    restart: always
     environment:
       POSTGRES_USER: ${BD_USERNAME}
-      POSTGRES_DB: ${BD_DATABASE}
       POSTGRES_PASSWORD: ${BD_PASSWORD}
-    expose:
-      - "${BD_PORT}"
+      POSTGRES_DB: ${BD_DATABASE}
     ports:
       - "${BD_PORT}:${BD_PORT}"
+  api:
+    build: .
+    restart: always
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    environment:
+      PGUSER: ${BD_USERNAME}
+      PGHOST: ${BD_HOST}
+      PGDATABASE: ${BD_DATABASE}
+      PGPASSWORD: ${BD_PASSWORD}
+      PGPORT: "${BD_PORT}"
+

@@ -12,7 +12,9 @@
     "test": "set NODE_ENV=test&&jest",
     "posttest": "ts-node-dev src/scripts/afterAllTests.ts",
     "seed": "ts-node-dev src/scripts/Seeders.ts",
-    "clean": "ts-node-dev src/scripts/afterAllTests.ts"
+    "clean": "ts-node-dev src/scripts/afterAllTests.ts",
+    "dev-init-user": "ts-node-dev src/scripts/InitUsers.ts",
+    "prd-init-user": "node build/src/scripts/InitUsers.js"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
