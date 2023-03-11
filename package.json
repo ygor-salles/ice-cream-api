@@ -1,11 +1,13 @@
 {
   "name": "sorveteria",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
+  "engines": {
+    "node": "18"
+  },
   "scripts": {
     "build": "tsc",
-    "start": "node build/src/server",
+    "start": "node build/src/server.js",
     "dev": "ts-node-dev --files --transpile-only --ignore-watch node_modules src/server.ts",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
     "pretest": "set NODE_ENV=test&&ts-node-dev src/scripts/Seeders.ts",
