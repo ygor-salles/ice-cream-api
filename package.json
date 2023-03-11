@@ -2,9 +2,6 @@
   "name": "sorveteria",
   "version": "1.0.0",
   "license": "MIT",
-  "engines": {
-    "node": "18"
-  },
   "scripts": {
     "build": "tsc",
     "start": "node build/src/server.js",
