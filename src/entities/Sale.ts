@@ -1,7 +1,6 @@
 import {
   AfterInsert,
   AfterRemove,
-  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -13,7 +12,6 @@ import {
 import { IDataProduct } from '../dtos/IProduct';
 import { HookSale } from '../hooks/HookSale';
 import { Client } from './Client';
-import { EnumTypeProduct } from './Product';
 
 export enum EnumTypeSale {
   PIX = 'PIX',
@@ -37,9 +35,6 @@ class Sale {
   @Column()
   observation?: string;
 
-  @Column()
-  amount?: number;
-
   @CreateDateColumn()
   created_at: Date;
 
@@ -47,7 +42,7 @@ class Sale {
   updated_at: Date;
 
   @Column({ type: 'simple-json' })
-  data_product?: IDataProduct;
+  data_product?: IDataProduct[];
 
   @Column()
   in_progress: boolean;
@@ -58,26 +53,6 @@ class Sale {
   @ManyToOne(() => Client)
   @JoinColumn({ name: 'client_id' })
   client: Client;
-
-  @BeforeInsert()
-  async beforeInsert() {
-    if (this.data_product) {
-      if (this.data_product.type === EnumTypeProduct.ACAI) {
-        this.in_progress = true;
-      }
-      const combinations = this.data_product?.combinations;
-      this.data_product = combinations.length
-        ? {
-            name: this.data_product.name,
-            price: this.data_product.price,
-            combinations: combinations.map(item => ({ name: item.name, price: item.price })),
-          }
-        : {
-            name: this.data_product.name,
-            price: this.data_product.price,
-          };
-    }
-  }
 
   @AfterInsert()
   async afterInsert(): Promise<void> {

@@ -19,42 +19,64 @@ class SaleValidator {
         .oneOf(Object.values(EnumTypeSale))
         .required('Type_sale is required'),
       observation: yup.string().optional(),
-      amount: yup.number().required('Amount is required'),
       client_id: yup.number().optional(),
       in_progress: yup.bool().optional(),
       data_product: yup
-        .object()
-        .shape({
-          id: yup.number().required('Id data_product is required'),
-          name: yup.string().required('Name data_product is required'),
-          price: yup.number().required('Price data_product is required'),
-          type: yup
-            .mixed<EnumTypeProduct>()
-            .oneOf(Object.values(EnumTypeProduct))
-            .required('Type data_product is required'),
-        })
+        .array()
+        .of(
+          yup.object().shape({
+            amount: yup.number().required('Amount data_product is required'),
+            name: yup.string().required('Name data_product is required'),
+            price: yup.number().required('Price data_product is required'),
+            combinations: yup
+              .array()
+              .of(
+                yup.object().shape({
+                  name: yup.string(),
+                  price: yup.number(),
+                }),
+              )
+              .optional(),
+            type: yup
+              .mixed<EnumTypeProduct>()
+              .oneOf(Object.values(EnumTypeProduct))
+              .required('Type data_product is required'),
+            total: yup.number().required('Total is required'),
+          }),
+        )
         .required('Data_product is required'),
     });
   }
 
   updateValidation() {
     return yup.object().shape({
-      id: yup.number().required('Id is required in params'),
+      id: yup.number().optional(),
       total: yup.number().optional(),
       type_sale: yup.mixed<EnumTypeSale>().oneOf(Object.values(EnumTypeSale)).optional(),
       observation: yup.string().optional(),
-      amount: yup.number().optional(),
       client_id: yup.number().optional(),
       in_progress: yup.bool().optional(),
       data_product: yup
-        .object()
-        .notRequired()
-        .shape({
-          id: yup.number().optional(),
-          name: yup.string().optional(),
-          price: yup.number().optional(),
-        })
-        .optional(),
+        .array()
+        .of(
+          yup.object().shape({
+            amount: yup.number().optional(),
+            name: yup.string().optional(),
+            price: yup.number().optional(),
+            combinations: yup
+              .array()
+              .of(
+                yup.object().shape({
+                  name: yup.string(),
+                  price: yup.number(),
+                }),
+              )
+              .optional(),
+            type: yup.mixed<EnumTypeProduct>().oneOf(Object.values(EnumTypeProduct)).optional(),
+            total: yup.number().optional(),
+          }),
+        )
+        .required('Data_product is required'),
     });
   }
 

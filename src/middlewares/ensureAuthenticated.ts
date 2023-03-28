@@ -8,9 +8,8 @@ interface IPayload {
 }
 
 export function ensureAuthenticated(request: Request, response: Response, next: NextFunction) {
-  // Receber o token
   const authToken = request.headers.authorization;
-  // Validar se o authToken está preenchido
+
   if (!authToken) {
     throw new ApiError(401);
   }
@@ -18,10 +17,8 @@ export function ensureAuthenticated(request: Request, response: Response, next: 
   const [, token] = authToken.split(' ');
 
   try {
-    // Verificar se token é válido
     const { sub } = verify(token, process.env.JWT_SECRET) as IPayload;
 
-    // Recuperar informações do usuário
     request.userId = sub;
 
     return next();
