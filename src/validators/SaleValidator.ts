@@ -76,7 +76,7 @@ class SaleValidator {
             total: yup.number().optional(),
           }),
         )
-        .required('Data_product is required'),
+        .optional(),
     });
   }
 
