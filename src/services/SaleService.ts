@@ -3,12 +3,17 @@ import { IPostCashClosing, IReadSumSales, IReadSumSalesToday, ISale } from '../d
 import { EnumTypeSale, Sale } from '../entities/Sale';
 import { SaleRepository } from '../repositories/SaleRepository';
 import { getLocalTodayDate } from '../utils';
+import { Client } from '../entities/Client';
+import { ClientRepository } from '../repositories/ClientRepository';
 
 class SaleService {
   private repositorySale: Repository<Sale>;
 
+  private repositoryClient: Repository<Client>;
+
   constructor() {
     this.repositorySale = getCustomRepository(SaleRepository);
+    this.repositoryClient = getCustomRepository(ClientRepository);
   }
 
   async create(data: ISale) {
@@ -62,6 +67,25 @@ class SaleService {
   }
 
   async updateById(id: number, data: ISale) {
+    if (data.type_sale === EnumTypeSale.DEBIT && data.client_id) {
+      const oldSaleData = await this.repositorySale.findOne(id);
+      const client = await this.repositoryClient.findOne(data.client_id);
+
+      if (oldSaleData.total <= data.total) {
+        const difference = data.total - oldSaleData.total;
+        await this.repositoryClient.update(client.id, {
+          ...client,
+          debit: client.debit + difference,
+        });
+      } else {
+        const difference = oldSaleData.total - data.total;
+        await this.repositoryClient.update(client.id, {
+          ...client,
+          debit: client.debit - difference,
+        });
+      }
+    }
+
     await this.repositorySale.update(id, data);
   }
 
