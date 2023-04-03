@@ -53,7 +53,7 @@ class SaleValidator {
       id: yup.number().optional(),
       total: yup.number().optional(),
       type_sale: yup.mixed<EnumTypeSale>().oneOf(Object.values(EnumTypeSale)).optional(),
-      observation: yup.string().optional(),
+      observation: yup.string().nullable().optional(),
       client_id: yup.number().optional(),
       in_progress: yup.bool().optional(),
       data_product: yup
