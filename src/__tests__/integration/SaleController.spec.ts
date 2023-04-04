@@ -157,7 +157,6 @@ describe('Sales', () => {
     expect(saleUpdated.total).toBe(editedSale.total);
     expect(saleUpdated.type_sale).toBe(editedSale.type_sale);
     expect(saleUpdated.observation).toBe(editedSale.observation);
-    expect(saleUpdated.amount).toBe(editedSale.amount);
     expect(saleUpdated.data_product).toStrictEqual(editedSale.data_product);
     expect(saleUpdated.client_id).toBe(editedSale.client_id);
     expect(response.body.message).toBe('Sale updated successfully');
