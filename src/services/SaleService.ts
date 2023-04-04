@@ -67,22 +67,43 @@ class SaleService {
   }
 
   async updateById(id: number, data: ISale) {
-    if (data.type_sale === EnumTypeSale.DEBIT && data.client_id) {
-      const oldSaleData = await this.repositorySale.findOne(id);
+    if (data.client_id) {
+      console.log('*');
+      const oldSale = await this.repositorySale.findOne(id);
       const client = await this.repositoryClient.findOne(data.client_id);
 
-      if (oldSaleData.total <= data.total) {
-        const difference = data.total - oldSaleData.total;
+      if (oldSale.type_sale !== EnumTypeSale.DEBIT && data.type_sale === EnumTypeSale.DEBIT) {
         await this.repositoryClient.update(client.id, {
           ...client,
-          debit: client.debit + difference,
+          debit: client.debit + data.total,
         });
-      } else {
-        const difference = oldSaleData.total - data.total;
+      } else if (
+        oldSale.type_sale === EnumTypeSale.DEBIT &&
+        data.type_sale !== EnumTypeSale.DEBIT
+      ) {
         await this.repositoryClient.update(client.id, {
           ...client,
-          debit: client.debit - difference,
+          debit: client.debit - data.total,
         });
+      } else if (
+        oldSale.type_sale === EnumTypeSale.DEBIT &&
+        data.type_sale === EnumTypeSale.DEBIT
+      ) {
+        if (oldSale.total <= data.total) {
+          const difference = data.total - oldSale.total;
+
+          await this.repositoryClient.update(client.id, {
+            ...client,
+            debit: client.debit + difference,
+          });
+        } else {
+          const difference = oldSale.total - data.total;
+
+          await this.repositoryClient.update(client.id, {
+            ...client,
+            debit: client.debit - difference,
+          });
+        }
       }
     }
 
