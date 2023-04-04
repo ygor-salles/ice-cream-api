@@ -3,12 +3,17 @@ import { IPostCashClosing, IReadSumSales, IReadSumSalesToday, ISale } from '../d
 import { EnumTypeSale, Sale } from '../entities/Sale';
 import { SaleRepository } from '../repositories/SaleRepository';
 import { getLocalTodayDate } from '../utils';
+import { Client } from '../entities/Client';
+import { ClientRepository } from '../repositories/ClientRepository';
 
 class SaleService {
   private repositorySale: Repository<Sale>;
 
+  private repositoryClient: Repository<Client>;
+
   constructor() {
     this.repositorySale = getCustomRepository(SaleRepository);
+    this.repositoryClient = getCustomRepository(ClientRepository);
   }
 
   async create(data: ISale) {
@@ -62,6 +67,48 @@ class SaleService {
   }
 
   async updateById(id: number, data: ISale) {
+    if (data.client_id) {
+      const oldSale = await this.repositorySale.findOne(id);
+      const client = await this.repositoryClient.findOne(data.client_id);
+
+      if (oldSale.type_sale !== EnumTypeSale.DEBIT && data.type_sale === EnumTypeSale.DEBIT) {
+        await this.repositoryClient.update(client.id, {
+          ...client,
+          debit: client.debit + data.total,
+        });
+      } else if (
+        oldSale.type_sale === EnumTypeSale.DEBIT &&
+        data.type_sale !== EnumTypeSale.DEBIT &&
+        data.total <= client.debit
+      ) {
+        await this.repositoryClient.update(client.id, {
+          ...client,
+          debit: client.debit - data.total,
+        });
+      } else if (
+        oldSale.type_sale === EnumTypeSale.DEBIT &&
+        data.type_sale === EnumTypeSale.DEBIT
+      ) {
+        if (oldSale.total <= data.total) {
+          const difference = data.total - oldSale.total;
+
+          await this.repositoryClient.update(client.id, {
+            ...client,
+            debit: client.debit + difference,
+          });
+        } else {
+          const difference = oldSale.total - data.total;
+
+          if (difference <= client.debit) {
+            await this.repositoryClient.update(client.id, {
+              ...client,
+              debit: client.debit - difference,
+            });
+          }
+        }
+      }
+    }
+
     await this.repositorySale.update(id, data);
   }
 

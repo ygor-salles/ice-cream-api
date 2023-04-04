@@ -163,16 +163,18 @@ class DataSeed {
   public static async createSales(): Promise<void> {
     const repository = getCustomRepository(SaleRepository);
     const arraySales = [];
-    const dataProduct = {
-      id: 1,
-      name: 'Salgadinho Cheetos',
-      type: EnumTypeProduct.GENERAL,
-      price: 3.5,
-      status: true,
-      created_at: '2022-12-21T17:54:28.122Z',
-      updated_at: '2022-12-21T17:54:28.122Z',
-      description: 'Salgadinho Cheetos Descrição',
-    };
+    const dataProduct = [
+      {
+        id: 1,
+        name: 'Salgadinho Cheetos',
+        type: EnumTypeProduct.GENERAL,
+        price: 3.5,
+        status: true,
+        created_at: '2022-12-21T17:54:28.122Z',
+        updated_at: '2022-12-21T17:54:28.122Z',
+        description: 'Salgadinho Cheetos Descrição',
+      },
+    ];
 
     arraySales.push(
       repository.create({
@@ -180,20 +182,17 @@ class DataSeed {
         type_sale: EnumTypeSale.MONEY,
         observation: 'Pago 3 reais no pix e 3 reais no dinheiro',
         client_id: 2,
-        amount: 1,
         data_product: dataProduct,
       }),
       repository.create({
         total: 10,
         type_sale: EnumTypeSale.PIX,
-        amount: 1,
         data_product: dataProduct,
       }),
       repository.create({
         total: 3.5,
         type_sale: EnumTypeSale.MONEY,
         client_id: 2,
-        amount: 2,
         data_product: dataProduct,
       }),
     );

@@ -2,12 +2,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Combination } from './Combination';
 
 export enum EnumTypeProduct {
   ICE_CREAM = 'SORVETE',
@@ -43,14 +40,6 @@ class Product {
 
   @UpdateDateColumn()
   updated_at: Date;
-
-  @ManyToMany(() => Combination, combination => combination.products)
-  @JoinTable({
-    name: 'product_combination',
-    joinColumns: [{ name: 'product_id', referencedColumnName: 'id' }],
-    inverseJoinColumns: [{ name: 'combination_id', referencedColumnName: 'id' }],
-  })
-  combinations: Combination[];
 }
 
 export { Product };

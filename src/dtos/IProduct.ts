@@ -1,4 +1,3 @@
-import { Combination } from '../entities/Combination';
 import { EnumTypeProduct } from '../entities/Product';
 
 export interface IProduct {
@@ -10,12 +9,13 @@ export interface IProduct {
   status?: boolean;
   created_at?: Date;
   updated_at?: Date;
-  combinations?: Array<Combination>;
 }
 
 export interface IDataProduct {
+  amount: number;
   name: string;
   price: number;
-  type?: EnumTypeProduct;
+  type: EnumTypeProduct;
   combinations?: Array<{ name: string; price: number }>;
+  total: number;
 }
