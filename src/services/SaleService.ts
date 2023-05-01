@@ -41,7 +41,7 @@ class SaleService {
     const offset = page * limit - limit;
 
     const salePaged = await this.repositorySale.find({
-      order: { updated_at: 'DESC' },
+      order: { created_at: 'DESC' },
       skip: offset,
       take: limit,
       relations: ['client'],
