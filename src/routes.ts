@@ -81,6 +81,7 @@ router.post(
   purchaseController.readSumPurchasesByPeriod,
 );
 router.get('/purchase/today', ensureAuthenticated, purchaseController.readSumPurchasesToday);
+router.get('/purchase/paged', ensureAuthenticated, purchaseController.readPurchasesPaged);
 router.get('/purchase/:id', ensureAuthenticated, purchaseController.readById);
 router.delete('/purchase/:id', ensureAuthenticated, ensureSuper, purchaseController.deleteById);
 router.put(

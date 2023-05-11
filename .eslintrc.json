@@ -23,6 +23,7 @@
     "no-shadow": "off",
     "class-methods-use-this": "off",
     "no-param-reassign": "off",
+    "radix": "off",
     "prettier/prettier": [
       "error",
       {

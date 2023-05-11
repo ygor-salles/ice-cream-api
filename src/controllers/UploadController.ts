@@ -25,10 +25,11 @@ export async function uploadImage(data: any, columnImage: string, request: Reque
 
 export async function removeImage(id: number, entitie: any, columnImage: string) {
   const storageService = new FirebaseStorageService();
-  if (entitie[columnImage]?.indexOf('http') !== -1)
+  if (entitie[columnImage] && entitie[columnImage].indexOf('http') !== -1) {
     await storageService.deleteImage(entitie[columnImage]);
-  else
+  } else if (entitie[columnImage]) {
     fs.unlink(`src/${entitie[columnImage]}`, err => {
       if (err) console.log('Error deleted image repository ->', err.message);
     });
+  }
 }

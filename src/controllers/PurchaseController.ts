@@ -123,6 +123,23 @@ class PurchaseController {
     const sumPurchases = await purchaseService.readSumPurchasesToday();
     response.status(200).json({ ...sumPurchases });
   }
+
+  async readPurchasesPaged(request: Request, response: Response) {
+    let { limit, page }: any = request.query;
+    limit = parseInt(limit || 1);
+    page = parseInt(page || 1);
+
+    const validator = new PurchaseValidator();
+    try {
+      await validator.readPagedValidation().validate({ limit, page }, { abortEarly: false });
+    } catch (error) {
+      throw new ApiError(400, error?.errors?.join(', ') || error);
+    }
+
+    const purchaseService = new PurchaseService();
+    const allPurchasesPaged = await purchaseService.readPurchasesPaged(limit, page);
+    response.json(allPurchasesPaged);
+  }
 }
 
 export { PurchaseController };

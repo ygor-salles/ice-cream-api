@@ -1,4 +1,3 @@
-/* eslint-disable radix */
 import { Request, Response } from 'express';
 import { IPostCashClosing, IReadSumSales, IReadSumSalesToday, ISale } from '../dtos/ISale';
 import { SaleService } from '../services/SaleService';

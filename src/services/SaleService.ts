@@ -53,7 +53,6 @@ class SaleService {
     return {
       total,
       page,
-      // eslint-disable-next-line radix
       totalPages: Number.isInteger(totalPages) ? totalPages : parseInt((totalPages + 1).toString()),
       limit,
       offset: offset + limit,

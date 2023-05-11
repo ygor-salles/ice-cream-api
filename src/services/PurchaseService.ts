@@ -145,6 +145,29 @@ class PurchaseService {
 
     return sumPurchases;
   }
+
+  async readPurchasesPaged(limit: number, page: number) {
+    const offset = page * limit - limit;
+
+    const purchasePaged = await this.repositoryPurchase.find({
+      order: { created_at: 'DESC' },
+      skip: offset,
+      take: limit,
+      relations: ['provider'],
+    });
+
+    const total = await this.repositoryPurchase.count();
+    const totalPages = total > limit ? total / limit : 1;
+
+    return {
+      total,
+      page,
+      totalPages: Number.isInteger(totalPages) ? totalPages : parseInt((totalPages + 1).toString()),
+      limit,
+      offset: offset + limit,
+      instances: purchasePaged,
+    };
+  }
 }
 
 export { PurchaseService };
