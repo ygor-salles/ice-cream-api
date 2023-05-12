@@ -76,6 +76,23 @@ class PaymentController {
     await paymentService.updateById(+id, data);
     response.status(200).json({ message: 'Payment updated successfully' });
   }
+
+  async readPaymentsPaged(request: Request, response: Response) {
+    let { limit, page }: any = request.query;
+    limit = parseInt(limit || 1);
+    page = parseInt(page || 1);
+
+    const validator = new PaymentValidator();
+    try {
+      await validator.readPagedValidation().validate({ limit, page }, { abortEarly: false });
+    } catch (error) {
+      throw new ApiError(400, error?.errors?.join(', ') || error);
+    }
+
+    const paymentService = new PaymentService();
+    const allPaymentsPaged = await paymentService.readPaymentsPaged(limit, page);
+    response.status(200).json(allPaymentsPaged);
+  }
 }
 
 export { PaymentController };

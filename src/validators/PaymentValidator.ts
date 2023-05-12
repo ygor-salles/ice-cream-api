@@ -37,6 +37,20 @@ class PaymentValidator {
       id: yup.number().required('Id is required in params'),
     });
   }
+
+  readPagedValidation() {
+    return yup.object().shape({
+      limit: yup
+        .number()
+        .min(1, 'Minimum limit per page is 1')
+        .max(100, 'Maximum limit per page is 100')
+        .required('Limit is required in query params'),
+      page: yup
+        .number()
+        .min(1, 'Minimum limit per page is 1')
+        .required('Limit is required in query params'),
+    });
+  }
 }
 
 export { PaymentValidator };

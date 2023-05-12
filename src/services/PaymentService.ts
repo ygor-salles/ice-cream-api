@@ -37,6 +37,29 @@ class PaymentService {
   async updateById(id: number, data: IPayment) {
     await this.repositoryPayment.update(id, data);
   }
+
+  async readPaymentsPaged(limit: number, page: number) {
+    const offset = page * limit - limit;
+
+    const paymentPaged = await this.repositoryPayment.find({
+      order: { created_at: 'DESC' },
+      skip: offset,
+      take: limit,
+      relations: ['client'],
+    });
+
+    const total = await this.repositoryPayment.count();
+    const totalPages = total > limit ? total / limit : 1;
+
+    return {
+      total,
+      page,
+      totalPages: Number.isInteger(totalPages) ? totalPages : parseInt((totalPages + 1).toString()),
+      limit,
+      offset: offset + limit,
+      instances: paymentPaged,
+    };
+  }
 }
 
 export { PaymentService };
