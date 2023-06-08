@@ -14,9 +14,6 @@
     "strict": false,
     "strictPropertyInitialization": false,
     "skipLibCheck": true,
-    // "typeRoots": [
-    //   "./src/@types",
-    //   "node_modules/@types"
-    // ]
+    "typeRoots": ["./src/@types", "node_modules/@types"]
   }
 }
