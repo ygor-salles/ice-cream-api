@@ -1,6 +1,7 @@
 import { app } from './app';
 import createConnection from './database/index';
 
+// DEPLOY 08/06/2023
 createConnection()
   .then(async () => {
     console.log('Database connection successfully initialized 👍');
