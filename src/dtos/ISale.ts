@@ -27,3 +27,20 @@ export interface IPostCashClosing {
   total: number;
   created_at?: Date;
 }
+
+export interface IReadSalesFilterPageQuery {
+  limit?: string;
+  page?: string;
+  client_id?: number;
+  observation?: string;
+  start_date?: string;
+  end_date?: string;
+}
+export interface IReadSalesFilterPage {
+  limit?: number;
+  page?: number;
+  client_id?: number;
+  observation?: string;
+  start_date?: string;
+  end_date?: string;
+}
