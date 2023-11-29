@@ -44,3 +44,10 @@ export interface IReadSalesFilterPage {
   start_date?: string;
   end_date?: string;
 }
+
+export interface IMountedWhere {
+  client_id?: number;
+  observation?: string;
+  start_date?: string;
+  end_date?: string;
+}

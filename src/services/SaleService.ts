@@ -1,5 +1,13 @@
-import { Between, getCustomRepository, Repository } from 'typeorm';
 import {
+  Between,
+  FindConditions,
+  getCustomRepository,
+  ILike,
+  ObjectLiteral,
+  Repository,
+} from 'typeorm';
+import {
+  IMountedWhere,
   IPostCashClosing,
   IReadSalesFilterPage,
   IReadSumSales,
@@ -205,33 +213,47 @@ class SaleService {
     return allSales;
   }
 
+  private mountedWhere({ client_id, end_date, observation, start_date }: IMountedWhere) {
+    const where: string | ObjectLiteral | FindConditions<Sale> | FindConditions<Sale>[] = {};
+
+    if (client_id) {
+      where.client_id = client_id;
+    }
+    if (observation) {
+      where.observation = ILike(`%${observation}%`);
+    }
+    if (start_date && end_date) {
+      where.created_at = Between(`${start_date} 00:00:00`, `${end_date} 23:59:59`);
+    }
+
+    return where;
+  }
+
   async readSalesFilterPage({
     start_date,
-    client_id,
     end_date,
     limit,
-    observation,
     page,
+    client_id,
+    observation,
   }: IReadSalesFilterPage) {
     const offset = page * limit - limit;
-    const initDate = new Date(start_date);
-    const finalDate = new Date(end_date);
 
-    const salePaged = await this.repositorySale.find({
+    const [salePaged, total] = await this.repositorySale.findAndCount({
       order: { created_at: 'DESC' },
       skip: offset,
       take: limit,
       relations: ['client'],
-      where: [{ observation }, { client_id }, { created_at: Between(initDate, finalDate) }],
+
+      where: this.mountedWhere({ client_id, end_date, observation, start_date }),
     });
 
-    const total = await this.repositorySale.count();
-    const totalPages = total > limit ? total / limit : 1;
+    const totalPages = total > limit ? Math.ceil(total / limit) : 1;
 
     return {
       total,
       page,
-      totalPages: Number.isInteger(totalPages) ? totalPages : parseInt((totalPages + 1).toString()),
+      totalPages,
       limit,
       offset: offset + limit,
       instances: salePaged,
