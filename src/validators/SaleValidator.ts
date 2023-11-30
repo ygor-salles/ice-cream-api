@@ -126,6 +126,24 @@ class SaleValidator {
       created_at: yup.date().optional(),
     });
   }
+
+  readSalesFilterPage() {
+    return yup.object().shape({
+      limit: yup
+        .number()
+        .min(1, 'Minimum limit per page is 1')
+        .max(100, 'Maximum limit per page is 100')
+        .required('Limit is required in query params'),
+      page: yup
+        .number()
+        .min(1, 'Minimum limit per page is 1')
+        .required('Limit is required in query params'),
+      client_name: yup.string().optional(),
+      observation: yup.string().optional(),
+      start_date: yup.string().optional(),
+      end_date: yup.string().optional(),
+    });
+  }
 }
 
 export { SaleValidator };

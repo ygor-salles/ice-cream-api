@@ -1,5 +1,12 @@
 import { Request, Response } from 'express';
-import { IPostCashClosing, IReadSumSales, IReadSumSalesToday, ISale } from '../dtos/ISale';
+import {
+  IPostCashClosing,
+  IReadSalesFilterPage,
+  IReadSalesFilterPageQuery,
+  IReadSumSales,
+  IReadSumSalesToday,
+  ISale,
+} from '../dtos/ISale';
 import { SaleService } from '../services/SaleService';
 import { ApiError } from '../validators/Exceptions/ApiError';
 import { SaleValidator } from '../validators/SaleValidator';
@@ -141,6 +148,32 @@ class SaleController {
     const saleService = new SaleService();
     const allSales = await saleService.readSalesActivatedAcai();
     response.status(200).json(allSales);
+  }
+
+  async readFilterSalePage(request: Request, response: Response) {
+    const { limit, page, client_id, end_date, observation, start_date }: IReadSalesFilterPageQuery =
+      request.query;
+    const limitNum = parseInt(limit) || 1;
+    const pageNum = parseInt(page) || 1;
+    const dataFormmated: IReadSalesFilterPage = {
+      client_id,
+      end_date,
+      observation,
+      start_date,
+      limit: limitNum,
+      page: pageNum,
+    };
+
+    const saleValidator = new SaleValidator();
+    try {
+      await saleValidator.readSalesFilterPage().validate(dataFormmated, { abortEarly: false });
+    } catch (error) {
+      throw new ApiError(400, error?.errors?.join(', ') || error);
+    }
+
+    const saleService = new SaleService();
+    const salesFilterPage = await saleService.readSalesFilterPage(dataFormmated);
+    response.status(200).json(salesFilterPage);
   }
 }
 

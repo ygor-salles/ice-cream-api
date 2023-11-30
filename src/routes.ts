@@ -97,18 +97,19 @@ router.put(
 router.post('/sales', ensureAuthenticated, saleController.create);
 router.get('/sales', ensureAuthenticated, saleController.read);
 router.get('/sales/paged', ensureAuthenticated, saleController.readSalesPaged);
+router.get('/sales/filter-page', ensureAuthenticated, saleController.readFilterSalePage);
 router.post('/sales/period', ensureAuthenticated, ensureSuper, saleController.readSumSalesByPeriod);
 router.get('/sales/today', ensureAuthenticated, saleController.readSumOfTodaySales);
 router.get('/sales/activated-acai', ensureAuthenticated, saleController.readSalesActivatedAcai);
-router.get('/sales/:id', ensureAuthenticated, saleController.readById);
-router.delete('/sales/:id', ensureAuthenticated, saleController.deleteById);
-router.put('/sales/:id', ensureAuthenticated, saleController.updateById);
 router.post(
   '/sales/cash-closing',
   ensureAuthenticated,
   ensureEmployee,
   saleController.dailyCashClosing,
 );
+router.get('/sales/:id', ensureAuthenticated, saleController.readById);
+router.delete('/sales/:id', ensureAuthenticated, saleController.deleteById);
+router.put('/sales/:id', ensureAuthenticated, saleController.updateById);
 
 // *************************************** COMBINATIONS ROUTES ********************************************** //
 router.post('/combinations', ensureAuthenticated, ensureEmployee, combinationController.create);
