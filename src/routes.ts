@@ -95,9 +95,7 @@ router.put(
 
 // *************************************** SALES ROUTES ********************************************** //
 router.post('/sales', ensureAuthenticated, saleController.create);
-router.get('/sales', ensureAuthenticated, saleController.read);
-router.get('/sales/paged', ensureAuthenticated, saleController.readSalesPaged);
-router.get('/sales/filter-page', ensureAuthenticated, saleController.readFilterSalePage);
+router.get('/sales/paged', ensureAuthenticated, saleController.readFilterSalePage);
 router.post('/sales/period', ensureAuthenticated, ensureSuper, saleController.readSumSalesByPeriod);
 router.get('/sales/today', ensureAuthenticated, saleController.readSumOfTodaySales);
 router.get('/sales/activated-acai', ensureAuthenticated, saleController.readSalesActivatedAcai);

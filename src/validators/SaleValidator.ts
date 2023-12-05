@@ -92,20 +92,6 @@ class SaleValidator {
     });
   }
 
-  readPagedValidation() {
-    return yup.object().shape({
-      limit: yup
-        .number()
-        .min(1, 'Minimum limit per page is 1')
-        .max(100, 'Maximum limit per page is 100')
-        .required('Limit is required in query params'),
-      page: yup
-        .number()
-        .min(1, 'Minimum limit per page is 1')
-        .required('Limit is required in query params'),
-    });
-  }
-
   readSumSalesByPeriod() {
     return yup.object().shape({
       startDate: yup.string().required('StartDate is required'),

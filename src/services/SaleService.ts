@@ -36,42 +36,11 @@ class SaleService {
     return sale;
   }
 
-  async read() {
-    const allSales = await this.repositorySale.find({
-      relations: ['client'],
-      order: { updated_at: 'DESC' },
-    });
-    return allSales;
-  }
-
   async readById(id: number) {
     const sale = await this.repositorySale.findOne(id, {
       relations: ['client'],
     });
     return sale;
-  }
-
-  async readSalesPaged(limit: number, page: number) {
-    const offset = page * limit - limit;
-
-    const salePaged = await this.repositorySale.find({
-      order: { created_at: 'DESC' },
-      skip: offset,
-      take: limit,
-      relations: ['client'],
-    });
-
-    const total = await this.repositorySale.count();
-    const totalPages = total > limit ? total / limit : 1;
-
-    return {
-      total,
-      page,
-      totalPages: Number.isInteger(totalPages) ? totalPages : parseInt((totalPages + 1).toString()),
-      limit,
-      offset: offset + limit,
-      instances: salePaged,
-    };
   }
 
   async deleteById(id: number) {

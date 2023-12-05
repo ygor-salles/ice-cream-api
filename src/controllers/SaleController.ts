@@ -27,12 +27,6 @@ class SaleController {
     response.status(201).json(sale);
   }
 
-  async read(request: Request, response: Response) {
-    const saleService = new SaleService();
-    const sale = await saleService.read();
-    response.status(200).json(sale);
-  }
-
   async readById(request: Request, response: Response) {
     const { id } = request.params;
 
@@ -80,23 +74,6 @@ class SaleController {
     const saleService = new SaleService();
     await saleService.updateById(+id, data);
     response.status(200).json({ message: 'Sale updated successfully' });
-  }
-
-  async readSalesPaged(request: Request, response: Response) {
-    let { limit, page }: any = request.query;
-    limit = parseInt(limit || 1);
-    page = parseInt(page || 1);
-
-    const validator = new SaleValidator();
-    try {
-      await validator.readPagedValidation().validate({ limit, page }, { abortEarly: false });
-    } catch (error) {
-      throw new ApiError(400, error?.errors?.join(', ') || error);
-    }
-
-    const saleService = new SaleService();
-    const allSalesPaged = await saleService.readSalesPaged(limit, page);
-    response.status(200).json(allSalesPaged);
   }
 
   async readSumSalesByPeriod(request: Request, response: Response) {
