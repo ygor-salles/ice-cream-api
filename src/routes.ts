@@ -12,6 +12,7 @@ import { SaleController } from './controllers/SaleController';
 import { CombinationController } from './controllers/CombinationController';
 import { UPLOAD_IMAGE } from './middlewares/uploadFile';
 import { ensureEmployee } from './middlewares/ensureEmployee';
+import { ensureHostLifeasier } from './middlewares/ensureHostLifeasier';
 
 const router = Router();
 
@@ -94,6 +95,7 @@ router.put(
 );
 
 // *************************************** SALES ROUTES ********************************************** //
+router.post('/sales/lifeasier', ensureHostLifeasier, saleController.create);
 router.post('/sales', ensureAuthenticated, saleController.create);
 router.get('/sales/paged', ensureAuthenticated, saleController.readFilterSalePage);
 router.post('/sales/period', ensureAuthenticated, ensureSuper, saleController.readSumSalesByPeriod);
