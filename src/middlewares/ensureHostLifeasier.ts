@@ -10,7 +10,7 @@ export function ensureHostLifeasier(request: Request, response: Response, next: 
   const headerRequestUrl = request.headers.origin;
 
   if (!headerRequestUrl.includes(urlCompare)) {
-    throw new ApiError(400);
+    throw new ApiError(401, 'host unauthorized');
   }
 
   return next();
