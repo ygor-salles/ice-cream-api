@@ -15,4 +15,5 @@ export interface IPurchaseMultipart {
   its_ice_cream_shoop: string;
   nf_url?: string;
   provider_id: string;
+  created_at?: string;
 }

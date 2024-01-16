@@ -7,6 +7,8 @@ export const formaterDataPurchase = (dataMultipart: IPurchaseMultipart): IPurcha
     value_total: Number(dataMultipart.value_total),
     its_ice_cream_shoop: dataMultipart.its_ice_cream_shoop === 'true',
     provider_id: Number(dataMultipart.provider_id),
+    created_at:
+      dataMultipart?.created_at === 'undefined' ? undefined : new Date(dataMultipart.created_at),
   };
   return data;
 };

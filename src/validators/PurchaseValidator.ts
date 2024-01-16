@@ -32,6 +32,7 @@ class PurchaseValidator {
       observation: yup.string().optional(),
       its_ice_cream_shoop: yup.boolean().required('Its_ice_cream_shoop is required'),
       provider_id: yup.number().required('Provider_id is required'),
+      created_at: yup.date().optional(),
     });
   }
 
