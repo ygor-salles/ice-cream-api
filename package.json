@@ -13,7 +13,10 @@
     "seed": "ts-node-dev src/scripts/Seeders.ts",
     "clean": "ts-node-dev src/scripts/afterAllTests.ts",
     "dev-init-user": "ts-node-dev src/scripts/InitUsers.ts",
-    "prd-init-user": "node build/src/scripts/InitUsers.js"
+    "prd-init-user": "node build/src/scripts/InitUsers.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -34,6 +37,7 @@
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^8.0.3",
     "jest": "^27.5.1",
     "prettier": "^2.5.1",
     "supertest": "^6.2.2",

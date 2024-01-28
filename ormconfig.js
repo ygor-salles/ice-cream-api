@@ -1,8 +1,8 @@
 require("dotenv").config();
 
-const ENV_MIGRATIONS = process.env.ENV_MIGRATIONS;
-const ENV_ENTITIES = process.env.ENV_ENTITIES
-const ENV_MIGRATIONS_DIR = process.env.ENV_MIGRATIONS_DIR;
+const { ENV_MIGRATIONS } = process.env;
+const { ENV_ENTITIES } = process.env
+const { ENV_MIGRATIONS_DIR } = process.env;
 
 let config = {}
 if (process.env.NODE_ENV === 'development') {
