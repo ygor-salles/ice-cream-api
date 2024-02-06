@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { IPayment } from '../dtos/IPayment';
+import { IPayment, IReadPaymentsFilterPage, IReadPaymentsFilterPageQuery } from '../dtos/IPayment';
 import { PaymentService } from '../services/PaymentService';
 import { ApiError } from '../validators/Exceptions/ApiError';
 import { PaymentValidator } from '../validators/PaymentValidator';
@@ -78,20 +78,25 @@ class PaymentController {
   }
 
   async readPaymentsPaged(request: Request, response: Response) {
-    let { limit, page }: any = request.query;
-    limit = parseInt(limit || 1);
-    page = parseInt(page || 1);
+    const { limit, page, ...rest }: IReadPaymentsFilterPageQuery = request.query;
+    const limitNum = parseInt(limit) || 1;
+    const pageNum = parseInt(page) || 1;
+
+    const dataFormmated: IReadPaymentsFilterPage = { ...rest, limit: limitNum, page: pageNum };
 
     const validator = new PaymentValidator();
     try {
-      await validator.readPagedValidation().validate({ limit, page }, { abortEarly: false });
+      await validator.readPagedValidation().validate(dataFormmated, { abortEarly: false });
     } catch (error) {
       throw new ApiError(400, error?.errors?.join(', ') || error);
     }
+    if (!validator.isRangeDateValid(rest.start_date, rest.end_date)) {
+      throw new ApiError(400, 'Range date incorrect');
+    }
 
     const paymentService = new PaymentService();
-    const allPaymentsPaged = await paymentService.readPaymentsPaged(limit, page);
-    response.status(200).json(allPaymentsPaged);
+    const allPaymentsPaged = await paymentService.readPaymentsPaged(dataFormmated);
+    response.json(allPaymentsPaged);
   }
 }
 

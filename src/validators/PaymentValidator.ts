@@ -9,6 +9,16 @@ class PaymentValidator {
     return !!payment;
   }
 
+  isRangeDateValid(start_date: string, end_date: string): boolean {
+    if (start_date && !end_date) return false;
+
+    if (!start_date && end_date) return false;
+
+    if (new Date(start_date) > new Date(end_date)) return false;
+
+    return true;
+  }
+
   createValidaton() {
     return yup.object().shape({
       value: yup.number().required('Value is required'),
@@ -49,6 +59,10 @@ class PaymentValidator {
         .number()
         .min(1, 'Minimum limit per page is 1')
         .required('Limit is required in query params'),
+      client_id: yup.string().optional(),
+      observation: yup.string().optional(),
+      start_date: yup.string().optional(),
+      end_date: yup.string().optional(),
     });
   }
 }

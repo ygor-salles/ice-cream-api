@@ -1,5 +1,12 @@
-import { getCustomRepository, Repository } from 'typeorm';
-import { IPayment } from '../dtos/IPayment';
+import {
+  Between,
+  FindConditions,
+  getCustomRepository,
+  ILike,
+  ObjectLiteral,
+  Repository,
+} from 'typeorm';
+import { IMountedWherePayment, IPayment, IReadPaymentsFilterPage } from '../dtos/IPayment';
 import { Payment } from '../entities/Payment';
 import { PaymentRepository } from '../repositories/PaymentRepository';
 
@@ -38,23 +45,40 @@ class PaymentService {
     await this.repositoryPayment.update(id, data);
   }
 
-  async readPaymentsPaged(limit: number, page: number) {
+  private mountedWhere({ client_id, end_date, observation, start_date }: IMountedWherePayment) {
+    const where: string | ObjectLiteral | FindConditions<Payment> | FindConditions<Payment>[] = {};
+
+    if (client_id) {
+      where.client_id = client_id;
+    }
+    if (observation) {
+      where.observation = ILike(`%${observation}%`);
+    }
+    if (start_date && end_date) {
+      where.created_at = Between(`${start_date} 00:00:00`, `${end_date} 23:59:59`);
+    }
+
+    return where;
+  }
+
+  async readPaymentsPaged({ limit, page, ...rest }: IReadPaymentsFilterPage) {
     const offset = page * limit - limit;
 
-    const paymentPaged = await this.repositoryPayment.find({
+    const [paymentPaged, total] = await this.repositoryPayment.findAndCount({
       order: { created_at: 'DESC' },
       skip: offset,
       take: limit,
       relations: ['client'],
+
+      where: this.mountedWhere(rest),
     });
 
-    const total = await this.repositoryPayment.count();
-    const totalPages = total > limit ? total / limit : 1;
+    const totalPages = total > limit ? Math.ceil(total / limit) : 1;
 
     return {
       total,
       page,
-      totalPages: Number.isInteger(totalPages) ? totalPages : parseInt((totalPages + 1).toString()),
+      totalPages,
       limit,
       offset: offset + limit,
       instances: paymentPaged,
