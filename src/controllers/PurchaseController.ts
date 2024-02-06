@@ -1,6 +1,10 @@
 /* eslint-disable no-throw-literal */
 import { Request, Response } from 'express';
-import { IPurchaseMultipart } from '../dtos/IPurchase';
+import {
+  IPurchaseMultipart,
+  IReadPurchasesFilterPage,
+  IReadPurchasesFilterPageQuery,
+} from '../dtos/IPurchase';
 import { PurchaseService } from '../services/PurchaseService';
 import { PurchaseValidator } from '../validators/PurchaseValidator';
 import { ApiError } from '../validators/Exceptions/ApiError';
@@ -125,19 +129,24 @@ class PurchaseController {
   }
 
   async readPurchasesPaged(request: Request, response: Response) {
-    let { limit, page }: any = request.query;
-    limit = parseInt(limit || 1);
-    page = parseInt(page || 1);
+    const { limit, page, ...rest }: IReadPurchasesFilterPageQuery = request.query;
+    const limitNum = parseInt(limit) || 1;
+    const pageNum = parseInt(page) || 1;
+
+    const dataFormmated: IReadPurchasesFilterPage = { ...rest, limit: limitNum, page: pageNum };
 
     const validator = new PurchaseValidator();
     try {
-      await validator.readPagedValidation().validate({ limit, page }, { abortEarly: false });
+      await validator.readPagedValidation().validate(dataFormmated, { abortEarly: false });
     } catch (error) {
       throw new ApiError(400, error?.errors?.join(', ') || error);
     }
+    if (!validator.isRangeDateValid(rest.start_date, rest.end_date)) {
+      throw new ApiError(400, 'Range date incorrect');
+    }
 
     const purchaseService = new PurchaseService();
-    const allPurchasesPaged = await purchaseService.readPurchasesPaged(limit, page);
+    const allPurchasesPaged = await purchaseService.readPurchasesPaged(dataFormmated);
     response.json(allPurchasesPaged);
   }
 }

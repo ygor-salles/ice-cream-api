@@ -11,6 +11,16 @@ class SaleValidator {
     return !!sale;
   }
 
+  isRangeDateValid(start_date: string, end_date: string): boolean {
+    if (start_date && !end_date) return false;
+
+    if (!start_date && end_date) return false;
+
+    if (new Date(start_date) > new Date(end_date)) return false;
+
+    return true;
+  }
+
   createValidaton() {
     return yup.object().shape({
       total: yup.number().required('Total is required'),
@@ -124,7 +134,7 @@ class SaleValidator {
         .number()
         .min(1, 'Minimum limit per page is 1')
         .required('Limit is required in query params'),
-      client_name: yup.string().optional(),
+      client_id: yup.string().optional(),
       observation: yup.string().optional(),
       start_date: yup.string().optional(),
       end_date: yup.string().optional(),

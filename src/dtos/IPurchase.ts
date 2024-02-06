@@ -17,3 +17,28 @@ export interface IPurchaseMultipart {
   provider_id: string;
   created_at?: string;
 }
+
+export interface IReadPurchasesFilterPageQuery {
+  limit?: string;
+  page?: string;
+  provider_id?: number;
+  observation?: string;
+  start_date?: string;
+  end_date?: string;
+}
+
+export interface IReadPurchasesFilterPage {
+  limit?: number;
+  page?: number;
+  provider_id?: number;
+  observation?: string;
+  start_date?: string;
+  end_date?: string;
+}
+
+export interface IMountedWherePurchase {
+  provider_id?: number;
+  observation?: string;
+  start_date?: string;
+  end_date?: string;
+}

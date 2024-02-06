@@ -7,7 +7,7 @@ import {
   Repository,
 } from 'typeorm';
 import {
-  IMountedWhere,
+  IMountedWhereSale,
   IPostCashClosing,
   IReadSalesFilterPage,
   IReadSumSales,
@@ -182,7 +182,7 @@ class SaleService {
     return allSales;
   }
 
-  private mountedWhere({ client_id, end_date, observation, start_date }: IMountedWhere) {
+  private mountedWhere({ client_id, end_date, observation, start_date }: IMountedWhereSale) {
     const where: string | ObjectLiteral | FindConditions<Sale> | FindConditions<Sale>[] = {};
 
     if (client_id) {

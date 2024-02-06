@@ -147,6 +147,9 @@ class SaleController {
     } catch (error) {
       throw new ApiError(400, error?.errors?.join(', ') || error);
     }
+    if (!saleValidator.isRangeDateValid(start_date, end_date)) {
+      throw new ApiError(400, 'Range date incorrect');
+    }
 
     const saleService = new SaleService();
     const salesFilterPage = await saleService.readSalesFilterPage(dataFormmated);

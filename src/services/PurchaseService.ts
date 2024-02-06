@@ -1,6 +1,13 @@
-import { getCustomRepository, Repository } from 'typeorm';
+import {
+  Between,
+  FindConditions,
+  getCustomRepository,
+  ILike,
+  ObjectLiteral,
+  Repository,
+} from 'typeorm';
 import { IReadSumPurchases } from '../dtos/IProvider';
-import { IPurchase } from '../dtos/IPurchase';
+import { IPurchase, IMountedWherePurchase, IReadPurchasesFilterPage } from '../dtos/IPurchase';
 import { Purchase } from '../entities/Purchase';
 import { PurchaseRepository } from '../repositories/PurchaseRepository';
 import { getLocalTodayDate } from '../utils';
@@ -146,23 +153,41 @@ class PurchaseService {
     return sumPurchases;
   }
 
-  async readPurchasesPaged(limit: number, page: number) {
+  private mountedWhere({ provider_id, end_date, observation, start_date }: IMountedWherePurchase) {
+    const where: string | ObjectLiteral | FindConditions<Purchase> | FindConditions<Purchase>[] =
+      {};
+
+    if (provider_id) {
+      where.provider_id = provider_id;
+    }
+    if (observation) {
+      where.observation = ILike(`%${observation}%`);
+    }
+    if (start_date && end_date) {
+      where.created_at = Between(`${start_date} 00:00:00`, `${end_date} 23:59:59`);
+    }
+
+    return where;
+  }
+
+  async readPurchasesPaged({ limit, page, ...rest }: IReadPurchasesFilterPage) {
     const offset = page * limit - limit;
 
-    const purchasePaged = await this.repositoryPurchase.find({
+    const [purchasePaged, total] = await this.repositoryPurchase.findAndCount({
       order: { created_at: 'DESC' },
       skip: offset,
       take: limit,
       relations: ['provider'],
+
+      where: this.mountedWhere(rest),
     });
 
-    const total = await this.repositoryPurchase.count();
-    const totalPages = total > limit ? total / limit : 1;
+    const totalPages = total > limit ? Math.ceil(total / limit) : 1;
 
     return {
       total,
       page,
-      totalPages: Number.isInteger(totalPages) ? totalPages : parseInt((totalPages + 1).toString()),
+      totalPages,
       limit,
       offset: offset + limit,
       instances: purchasePaged,

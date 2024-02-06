@@ -45,7 +45,7 @@ export interface IReadSalesFilterPage {
   end_date?: string;
 }
 
-export interface IMountedWhere {
+export interface IMountedWhereSale {
   client_id?: number;
   observation?: string;
   start_date?: string;

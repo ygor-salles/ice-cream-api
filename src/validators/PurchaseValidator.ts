@@ -10,6 +10,16 @@ class PurchaseValidator {
     return purchase;
   }
 
+  isRangeDateValid(start_date: string, end_date: string): boolean {
+    if (start_date && !end_date) return false;
+
+    if (!start_date && end_date) return false;
+
+    if (new Date(start_date) > new Date(end_date)) return false;
+
+    return true;
+  }
+
   deleteByIdValidation() {
     return yup.object().shape({
       id: yup.number().required('Id is required in params'),
@@ -62,6 +72,10 @@ class PurchaseValidator {
         .number()
         .min(1, 'Minimum limit per page is 1')
         .required('Limit is required in query params'),
+      provider_id: yup.string().optional(),
+      observation: yup.string().optional(),
+      start_date: yup.string().optional(),
+      end_date: yup.string().optional(),
     });
   }
 }
