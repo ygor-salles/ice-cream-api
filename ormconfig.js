@@ -73,10 +73,10 @@ else if (process.env.NODE_ENV === 'test') {
         rejectUnauthorized: false,
       },
     },
-    migrations: [process?.env?.ENV_MIGRATIONS ?? 'src/database/migrations/*.ts'],
-    entities: [process?.env?.ENV_ENTITIES ?? 'src/entities/*.ts'],
+    migrations: [ENV_MIGRATIONS],
+    entities: [ENV_ENTITIES],
     cli: {
-      migrationsDir: process?.env?.ENV_MIGRATIONS_DIR ?? 'src/database/migrations',
+      migrationsDir: ENV_MIGRATIONS_DIR,
     },
   };
 } else {
