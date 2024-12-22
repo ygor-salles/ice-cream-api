@@ -7,8 +7,7 @@ export class AddColumnIsPaidTableSale1733499105168 implements MigrationInterface
       new TableColumn({
         name: 'isPaid',
         type: 'boolean',
-        isNullable: true,
-        default: null,
+        default: true,
       }),
     );
   }
