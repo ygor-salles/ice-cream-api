@@ -30,8 +30,11 @@ class SaleService {
     this.repositoryClient = getCustomRepository(ClientRepository);
   }
 
-  async create(data: ISale) {
-    const sale = this.repositorySale.create(data);
+  async create(data: ISale, hostLifeasierOrigin: boolean) {
+    const sale = this.repositorySale.create({
+      ...data,
+      isPaid: !hostLifeasierOrigin,
+    });
     await this.repositorySale.save(sale);
     return sale;
   }

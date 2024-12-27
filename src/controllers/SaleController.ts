@@ -14,6 +14,7 @@ import { SaleValidator } from '../validators/SaleValidator';
 class SaleController {
   async create(request: Request, response: Response) {
     const { ...data }: ISale = request.body;
+    const { hostLifeasierOrigin } = request;
 
     const saleValidator = new SaleValidator();
     try {
@@ -23,7 +24,7 @@ class SaleController {
     }
 
     const saleService = new SaleService();
-    const sale = await saleService.create(data);
+    const sale = await saleService.create(data, hostLifeasierOrigin);
     response.status(201).json(sale);
   }
 

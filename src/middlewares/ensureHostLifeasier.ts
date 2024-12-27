@@ -13,5 +13,6 @@ export function ensureHostLifeasier(request: Request, response: Response, next: 
     throw new ApiError(401, 'host unauthorized');
   }
 
+  request.hostLifeasierOrigin = true;
   return next();
 }
