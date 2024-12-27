@@ -11,6 +11,7 @@ export interface ISale {
   updated_at?: Date;
   client_id?: number;
   data_product?: IDataProduct[];
+  isPaid: boolean;
 }
 
 export interface IReadSumSales {

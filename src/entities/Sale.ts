@@ -54,6 +54,9 @@ class Sale {
   @JoinColumn({ name: 'client_id' })
   client: Client;
 
+  @Column()
+  isPaid: boolean;
+
   @AfterInsert()
   async afterInsert(): Promise<void> {
     if (this.type_sale === EnumTypeSale.DEBIT) {

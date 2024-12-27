@@ -55,6 +55,7 @@ class SaleValidator {
           }),
         )
         .required('Data_product is required'),
+      isPaid: yup.bool().required('isPaid is required'),
     });
   }
 
@@ -87,6 +88,7 @@ class SaleValidator {
           }),
         )
         .optional(),
+      isPaid: yup.bool().optional(),
     });
   }
 
