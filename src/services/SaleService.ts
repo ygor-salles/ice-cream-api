@@ -33,7 +33,7 @@ class SaleService {
   async create(data: ISale, hostLifeasierOrigin: boolean) {
     const sale = this.repositorySale.create({
       ...data,
-      isPaid: !hostLifeasierOrigin,
+      isPaid: hostLifeasierOrigin ? false : data.isPaid,
     });
     await this.repositorySale.save(sale);
     return sale;
