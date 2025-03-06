@@ -27,7 +27,7 @@ const paymentController = new PaymentController_1.PaymentController();
 const purchaseController = new PurchaseController_1.PurchaseController();
 const saleController = new SaleController_1.SaleController();
 const combinationController = new CombinationController_1.CombinationController();
-router.get('/', (req, resp) => resp.status(200).json({ message: 'Welcome api-iceCreamShop' }));
+router.get('/', (req, resp) => resp.status(200).json({ message: 'Welcome api-iceCreamShop 06/03/2025' }));
 router.post('/signin', authController.handle);
 // *************************************** USER ROUTES ********************************************** //
 router.post('/users', ensureAuthenticated_1.ensureAuthenticated, ensureSuper_1.ensureSuper, userController.create);

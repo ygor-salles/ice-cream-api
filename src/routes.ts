@@ -27,7 +27,7 @@ const saleController = new SaleController();
 const combinationController = new CombinationController();
 
 router.get('/', (req: Request, resp: Response) =>
-  resp.status(200).json({ message: 'Welcome api-iceCreamShop' }),
+  resp.status(200).json({ message: 'Welcome api-iceCreamShop 06/03/2025' }),
 );
 router.post('/signin', authController.handle);
 
