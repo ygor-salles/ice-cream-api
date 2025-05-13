@@ -7,7 +7,7 @@ export const connectionConfig = () => {
     return {
       type: 'postgres',
       host: process.env.BD_HOST ?? 'localhost',
-      port: +process.env.BD_PORT_TEST ?? 5432,
+      port: +process.env.BD_PORT_TEST || 5432,
       username: process.env.BD_USERNAME_TEST,
       password: process.env.BD_PASSWORD_TEST,
       database: process.env.BD_DATABASE_TEST,
@@ -24,7 +24,7 @@ export const connectionConfig = () => {
     return {
       type: 'postgres',
       host: process.env.BD_HOST_PROD,
-      port: +process.env.BD_PORT_PROD ?? 5432,
+      port: +process.env.BD_PORT_PROD || 5432,
       username: process.env.BD_USERNAME_PROD,
       password: process.env.BD_PASSWORD_PROD,
       database: process.env.BD_DATABASE_PROD,
@@ -47,7 +47,7 @@ export const connectionConfig = () => {
     return {
       type: 'postgres',
       host: process.env.BD_HOST_STG,
-      port: +process.env.BD_PORT_STG ?? 5432,
+      port: +process.env.BD_PORT_STG || 5432,
       username: process.env.BD_USERNAME_STG,
       password: process.env.BD_PASSWORD_STG,
       database: process.env.BD_DATABASE_STG,
@@ -69,7 +69,7 @@ export const connectionConfig = () => {
   return {
     type: 'postgres',
     host: process.env.BD_HOST ?? 'localhost',
-    port: process.env.BD_PORT ?? 5432,
+    port: process.env.BD_PORT || 5432,
     username: process.env.BD_USERNAME,
     password: process.env.BD_PASSWORD,
     database: process.env.BD_DATABASE,
