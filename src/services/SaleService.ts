@@ -19,6 +19,8 @@ import { SaleRepository } from '../repositories/SaleRepository';
 import { getLocalTodayDate } from '../utils';
 import { Client } from '../entities/Client';
 import { ClientRepository } from '../repositories/ClientRepository';
+import { getIO } from '../socket';
+import { EnumTypeProduct } from '../entities/Product';
 
 class SaleService {
   private repositorySale: Repository<Sale>;
@@ -30,13 +32,26 @@ class SaleService {
     this.repositoryClient = getCustomRepository(ClientRepository);
   }
 
+  async emitNewSaleAcai(sale: Sale) {
+    const hasAcai = sale.data_product.some(product => product.type === EnumTypeProduct.ACAI);
+
+    if (hasAcai) {
+      const responseGetId = await this.readById(sale.id);
+      const io = getIO();
+      io.emit('new_sale', responseGetId);
+    }
+  }
+
   async create(data: ISale, hostLifeasierOrigin: boolean) {
     const sale = this.repositorySale.create({
       ...data,
       isPaid: hostLifeasierOrigin ? false : data.isPaid,
     });
-    await this.repositorySale.save(sale);
-    return sale;
+    const responseCreate = await this.repositorySale.save(sale);
+
+    await this.emitNewSaleAcai(responseCreate);
+
+    return responseCreate;
   }
 
   async readById(id: number) {
