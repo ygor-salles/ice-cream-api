@@ -13,7 +13,6 @@ app.use(cors());
 app.use(express.static('src'));
 app.use(router);
 
-// eslint-disable-next-line no-unused-vars
 app.use((err: ApiError | any, request: Request, response: Response, next: NextFunction) => {
   if (err instanceof ApiError) {
     if (err.message) {
