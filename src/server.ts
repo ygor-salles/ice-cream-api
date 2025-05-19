@@ -2,15 +2,14 @@
 import { createServer } from 'http';
 import { app } from './app';
 import createConnection from './database';
-// import { initSocket } from './socket';
+import { initSocket } from './socket';
 
 createConnection()
   .then(() => {
     console.log('Database connection successfully initialized 👍');
 
     const server = createServer(app);
-    // TODO: por enquanto utilizando firebase realtime database
-    // initSocket(server);
+    initSocket(server);
 
     const port = process.env.PORT || 4000;
     server.listen(port, () => {
@@ -21,8 +20,7 @@ createConnection()
     console.log(`Database connection error: ${error.message} ❌`);
 
     const server = createServer(app);
-    // TODO: por enquanto utilizando firebase realtime database
-    // initSocket(server);
+    initSocket(server);
 
     const port = process.env.PORT || 4000;
     server.listen(port, () => {
