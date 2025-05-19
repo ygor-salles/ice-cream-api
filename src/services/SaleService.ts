@@ -23,6 +23,7 @@ import { ClientRepository } from '../repositories/ClientRepository';
 // import { getIO } from '../socket';
 import { EnumTypeProduct } from '../entities/Product';
 import { dbFirebase } from '../socket/firebase';
+import { pusher } from '../socket/pusher';
 
 class SaleService {
   private repositorySale: Repository<Sale>;
@@ -35,28 +36,27 @@ class SaleService {
   }
 
   async emitNewSaleAcai(sale: Sale) {
-    console.log(1);
     const hasAcai = sale.data_product.some(product => product.type === EnumTypeProduct.ACAI);
 
-    console.log(2, hasAcai);
     if (hasAcai) {
-      console.log(3);
       const responseGetId = await this.readById(sale.id);
 
       // TODO: utilizar socket-io quando tiver uma hospedagem que aceite socket
       // const io = getIO();
       // io.emit('new_sale', responseGetId);
 
-      console.log(4, responseGetId);
       // TODO: por enquanto utilizando firebase realtime database
-      const ref = dbFirebase.ref('sales');
-      console.log(5);
-      await ref.push({
+      // const ref = dbFirebase.ref('sales');
+      // console.log(5);
+      // await ref.push({
+      //   ...responseGetId,
+      //   created_at: new Date().toISOString(),
+      //   updated_at: new Date().toISOString(),
+      // });
+
+      pusher.trigger('channel-sales', 'sales', {
         ...responseGetId,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
       });
-      console.log(6);
     }
   }
 
@@ -67,7 +67,16 @@ class SaleService {
     });
     const responseCreate = await this.repositorySale.save(sale);
 
-    await this.emitNewSaleAcai(responseCreate);
+    // await this.emitNewSaleAcai(responseCreate);
+    const hasAcai = sale.data_product.some(product => product.type === EnumTypeProduct.ACAI);
+    if (hasAcai) {
+      console.log('hasAcai');
+      const responseGetId = await this.readById(sale.id);
+      console.log(responseGetId);
+      pusher.trigger('channel-sales', 'sales', {
+        ...responseGetId,
+      });
+    }
 
     return responseCreate;
   }
