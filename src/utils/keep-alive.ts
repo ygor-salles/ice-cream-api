@@ -8,7 +8,7 @@ export function keepAlive(fn: Function) {
     .get(`${HOSTING}/health`)
     .then(response => {
       console.log(`Keep alive response: ${response.data}`);
-      setTimeout(() => keepAlive(fn), 600000); // 10 em 10 minutos
+      setTimeout(() => keepAlive(fn), 50000); // 50 em 50 segundos
     })
     .catch(() => {
       fn();
