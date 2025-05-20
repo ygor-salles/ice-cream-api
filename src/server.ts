@@ -3,6 +3,9 @@ import { createServer } from 'http';
 import { app } from './app';
 import createConnection from './database';
 import { initSocket } from './socket';
+import { keepAlive } from './utils/keep-alive';
+
+const HOSTING = process.env.HOSTING ?? 'local';
 
 createConnection()
   .then(() => {
@@ -15,6 +18,11 @@ createConnection()
     server.listen(port, () => {
       console.log(`Server is running on port ${port} 🚀`);
     });
+
+    if (HOSTING.includes('onrender')) {
+      console.log('Keep alive');
+      keepAlive(() => {});
+    }
   })
   .catch(error => {
     console.log(`Database connection error: ${error.message} ❌`);
@@ -26,4 +34,9 @@ createConnection()
     server.listen(port, () => {
       console.log(`Server is running on port ${port} 🚀`);
     });
+
+    if (HOSTING.includes('onrender')) {
+      console.log('Keep alive');
+      keepAlive(() => {});
+    }
   });
