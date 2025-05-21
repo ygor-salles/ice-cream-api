@@ -34,13 +34,20 @@ class SaleService {
   }
 
   async emitNewSaleAcai(sale: Sale) {
-    const hasAcai = sale.data_product.some(product => product.type === EnumTypeProduct.ACAI);
+    const responseGetId = await this.readById(sale.id);
+    const io = getIO();
+    io.emit('new_sale', responseGetId);
+  }
 
-    if (hasAcai) {
-      const responseGetId = await this.readById(sale.id);
-      const io = getIO();
-      io.emit('new_sale', responseGetId);
-    }
+  async emitDeleteSaleAcai(sale: Sale, id: number) {
+    const io = getIO();
+    io.emit('delete_sale', { ...sale, id });
+  }
+
+  async emitUpdateSaleAcai(id: number) {
+    const responseGetId = await this.readById(id);
+    const io = getIO();
+    io.emit('update_sale', responseGetId);
   }
 
   async create(data: ISale, hostLifeasierOrigin: boolean) {
@@ -65,6 +72,7 @@ class SaleService {
   async deleteById(id: number) {
     const sale = await this.repositorySale.findOne(id);
     await this.repositorySale.remove(sale);
+    await this.emitDeleteSaleAcai(sale, id);
   }
 
   async updateById(id: number, data: ISale) {
@@ -111,6 +119,7 @@ class SaleService {
     }
 
     await this.repositorySale.update(id, data);
+    await this.emitUpdateSaleAcai(id);
   }
 
   async readSumSalesByPeriod({ startDate, endDate, type_sale }: IReadSumSales) {
