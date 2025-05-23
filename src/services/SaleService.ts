@@ -21,7 +21,6 @@ import { getLocalTodayDate } from '../utils';
 import { Client } from '../entities/Client';
 import { ClientRepository } from '../repositories/ClientRepository';
 import { getIO } from '../socket';
-import { EnumTypeProduct } from '../entities/Product';
 
 class SaleService {
   private repositorySale: Repository<Sale>;
@@ -33,20 +32,38 @@ class SaleService {
     this.repositoryClient = getCustomRepository(ClientRepository);
   }
 
-  async emitNewSaleAcai(sale: Sale) {
+  async emitNewSale(sale: Sale) {
     const responseGetId = await this.readById(sale.id);
+
     const io = getIO();
-    io.emit('new_sale', responseGetId);
+    const event = sale.in_progress ? 'new_sale_active' : 'new_sale';
+    io.emit(event, responseGetId);
   }
 
-  async emitDeleteSaleAcai(sale: Sale, id: number) {
+  async emitDeleteSale(sale: Sale, id: number) {
     const io = getIO();
-    io.emit('delete_sale', { ...sale, id });
+    const event = sale.in_progress ? 'delete_sale_active' : 'delete_sale';
+    io.emit(event, { ...sale, id });
   }
 
-  async emitUpdateSaleAcai(id: number) {
+  async emitUpdateSale(id: number, oldInProgressActive: boolean) {
     const responseGetId = await this.readById(id);
     const io = getIO();
+    const newInProgressActive = responseGetId.in_progress;
+
+    if (!oldInProgressActive && newInProgressActive) {
+      io.emit('new_sale_active', responseGetId);
+      return;
+    }
+    if (oldInProgressActive && !newInProgressActive) {
+      io.emit('delete_sale_active', responseGetId);
+      return;
+    }
+    if (oldInProgressActive) {
+      io.emit('update_sale_active', responseGetId);
+      return;
+    }
+
     io.emit('update_sale', responseGetId);
   }
 
@@ -57,7 +74,7 @@ class SaleService {
     });
     const responseCreate = await this.repositorySale.save(sale);
 
-    await this.emitNewSaleAcai(responseCreate);
+    await this.emitNewSale(responseCreate);
 
     return responseCreate;
   }
@@ -72,12 +89,13 @@ class SaleService {
   async deleteById(id: number) {
     const sale = await this.repositorySale.findOne(id);
     await this.repositorySale.remove(sale);
-    await this.emitDeleteSaleAcai(sale, id);
+    await this.emitDeleteSale(sale, id);
   }
 
   async updateById(id: number, data: ISale) {
+    const oldSale = await this.repositorySale.findOne(id);
+
     if (data.client_id) {
-      const oldSale = await this.repositorySale.findOne(id);
       const client = await this.repositoryClient.findOne(data.client_id);
 
       if (oldSale.type_sale !== EnumTypeSale.DEBIT && data.type_sale === EnumTypeSale.DEBIT) {
@@ -119,7 +137,7 @@ class SaleService {
     }
 
     await this.repositorySale.update(id, data);
-    await this.emitUpdateSaleAcai(id);
+    await this.emitUpdateSale(id, oldSale.in_progress);
   }
 
   async readSumSalesByPeriod({ startDate, endDate, type_sale }: IReadSumSales) {
@@ -201,7 +219,7 @@ class SaleService {
     return sale;
   }
 
-  async readSalesActivatedAcai() {
+  async readSalesActivated() {
     const allSales = await this.repositorySale.find({
       relations: ['client'],
       where: { in_progress: true },

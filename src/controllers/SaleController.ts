@@ -124,7 +124,7 @@ class SaleController {
 
   async readSalesActivatedAcai(request: Request, response: Response) {
     const saleService = new SaleService();
-    const allSales = await saleService.readSalesActivatedAcai();
+    const allSales = await saleService.readSalesActivated();
     response.status(200).json(allSales);
   }
 
