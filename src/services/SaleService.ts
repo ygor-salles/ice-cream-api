@@ -51,6 +51,8 @@ class SaleService {
     const io = getIO();
     const newInProgressActive = responseGetId.in_progress;
 
+    io.emit('update_sale', responseGetId);
+
     if (!oldInProgressActive && newInProgressActive) {
       io.emit('new_sale_active', responseGetId);
       return;
@@ -61,10 +63,7 @@ class SaleService {
     }
     if (oldInProgressActive) {
       io.emit('update_sale_active', responseGetId);
-      return;
     }
-
-    io.emit('update_sale', responseGetId);
   }
 
   async create(data: ISale, hostLifeasierOrigin: boolean) {
